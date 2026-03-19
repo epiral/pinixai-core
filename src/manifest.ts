@@ -90,10 +90,33 @@ export function generateManifest(clip: Clip): string {
   const lines = [
     `Clip: ${clip.name}`,
     `Domain: ${clip.domain}`,
-    `Patterns: ${clip.patterns.length > 0 ? clip.patterns.join(", ") : "none"}`,
     "",
-    "Commands:",
   ];
+
+  if (clip.patterns.length > 0) {
+    lines.push("Patterns:");
+    for (const pattern of clip.patterns) {
+      lines.push(`  ${pattern}`);
+    }
+    lines.push("");
+  }
+
+  const entityEntries = Object.entries(clip.entities);
+  if (entityEntries.length > 0) {
+    lines.push("Entities:");
+    for (const [name, schema] of entityEntries) {
+      const entityDesc = schema.description;
+      lines.push(`  ${name}${entityDesc ? ` — ${entityDesc}` : ""}:`);
+      for (const [field, fieldSchema] of Object.entries(schema.shape)) {
+        const desc = (fieldSchema as z.ZodType).description;
+        const type = zodToManifestType(fieldSchema as z.ZodType);
+        lines.push(`    ${field}: ${type}${desc ? ` — ${desc}` : ""}`);
+      }
+    }
+    lines.push("");
+  }
+
+  lines.push("Commands:");
 
   const commands = Array.from(clip.getCommands().entries());
 

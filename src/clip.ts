@@ -22,6 +22,7 @@ export abstract class Clip {
   abstract name: string;
   abstract domain: string;
   abstract patterns: string[];
+  entities: Record<string, z.ZodObject<any>> = {};
 
   protected readonly commands = new Map<string, HandlerDef>();
   protected readonly commandDescriptions = new Map<string, string>();
@@ -82,19 +83,27 @@ export abstract class Clip {
   }
 
   printHelp(): string {
-    const lines = [
+    const lines: string[] = [
       `${this.name} (${this.domain})`,
-      `Patterns: ${this.patterns.length > 0 ? this.patterns.join(", ") : "none"}`,
       "",
-      "Usage:",
-      "  bun run <script> <command> [options]",
-      "  bun run <script> --help",
-      "  bun run <script> --manifest",
-      "  bun run <script> --mcp",
-      "  bun run <script> --ipc",
-      "",
-      "Commands:",
     ];
+
+    if (this.patterns.length > 0) {
+      lines.push("Patterns:");
+      for (const pattern of this.patterns) {
+        lines.push(`  ${pattern}`);
+      }
+      lines.push("");
+    }
+
+    lines.push("Usage:");
+    lines.push("  bun run <script> <command> [options]");
+    lines.push("  bun run <script> --help");
+    lines.push("  bun run <script> --manifest");
+    lines.push("  bun run <script> --mcp");
+    lines.push("  bun run <script> --ipc");
+    lines.push("");
+    lines.push("Commands:");
 
     if (this.commands.size === 0) {
       lines.push("  (none)");

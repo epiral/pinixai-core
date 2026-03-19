@@ -1,14 +1,21 @@
 import { Clip, command, handler, z } from "../src/index.ts";
 
 const todoSchema = z.object({
-  id: z.number(),
-  title: z.string(),
-});
+  id: z.number().describe("唯一标识"),
+  title: z.string().describe("待办标题"),
+}).describe("待办事项，最小任务单元");
 
 class TodoClip extends Clip {
   name = "todo";
   domain = "productivity";
-  patterns = ["todo", "task", "tasks"];
+  patterns = [
+    "list → add → list (添加后验证)",
+    "list → delete → list (删除后验证)",
+  ];
+
+  entities = {
+    Todo: todoSchema,
+  };
 
   todos = [
     { id: 1, title: "学习 Bun" },
