@@ -1,6 +1,8 @@
 import { z } from "zod";
 import { CLIHelpError, formatCLIHelp, parseCLIArgs } from "./cli";
 import type { HandlerDef } from "./handler";
+import { serveIPC } from "./ipc";
+import { serveMCP } from "./mcp";
 import { generateManifest } from "./manifest";
 
 function isHandlerDef(value: unknown): value is HandlerDef {
@@ -34,13 +36,11 @@ export abstract class Clip {
     }
 
     if (modeOrCommand === "--mcp") {
-      console.log("MCP mode not implemented yet");
-      return;
+      return serveMCP(this);
     }
 
     if (modeOrCommand === "--ipc") {
-      console.log("IPC mode not implemented yet");
-      return;
+      return serveIPC(this);
     }
 
     if (modeOrCommand === "--manifest") {
