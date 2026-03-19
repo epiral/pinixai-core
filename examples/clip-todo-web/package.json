@@ -1,0 +1,11 @@
+{
+  "name": "clip-todo-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun run index.ts --web"
+  },
+  "dependencies": {
+    "@pinixai/core": "file:../../"
+  }
+}

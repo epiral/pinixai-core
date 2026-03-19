@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Clip Todo Web</title>
+    <link rel="stylesheet" href="/style.css" />
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero">
+        <p class="eyebrow">Pinix Clip HTTP Demo</p>
+        <h1>Todo Web</h1>
+        <p class="subtitle">一个零依赖的原生 Web 示例，直接调用 Clip 暴露的 HTTP commands。</p>
+      </section>
+
+      <section class="panel">
+        <form id="todo-form" class="todo-form">
+          <label class="field">
+            <span>新增待办</span>
+            <input id="todo-input" name="title" type="text" placeholder="例如：补全 manifest 页面" autocomplete="off" required />
+          </label>
+          <button type="submit">添加</button>
+        </form>
+
+        <div class="toolbar">
+          <div>
+            <h2>任务列表</h2>
+            <p id="summary">正在加载...</p>
+          </div>
+          <button id="refresh-button" type="button" class="secondary">刷新</button>
+        </div>
+
+        <p id="status" class="status" role="status" aria-live="polite"></p>
+        <ul id="todo-list" class="todo-list"></ul>
+      </section>
+    </main>
+  </body>
+</html>

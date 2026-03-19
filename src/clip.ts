@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { CLIHelpError, formatCLIHelp, parseCLIArgs } from "./cli";
 import type { HandlerDef } from "./handler";
+import { serveHTTP } from "./http";
 import { serveIPC } from "./ipc";
 import { serveMCP } from "./mcp";
 import { generateManifest } from "./manifest";
@@ -42,6 +43,23 @@ export abstract class Clip {
 
     if (modeOrCommand === "--ipc") {
       return serveIPC(this);
+    }
+
+    if (modeOrCommand === "--web") {
+      const portArg = restArgs[0];
+
+      if (portArg === undefined) {
+        return serveHTTP(this);
+      }
+
+      const port = Number.parseInt(portArg, 10);
+
+      if (Number.isNaN(port)) {
+        console.error(`Invalid port: ${portArg}`);
+        return;
+      }
+
+      return serveHTTP(this, port);
     }
 
     if (modeOrCommand === "--manifest") {
@@ -102,6 +120,7 @@ export abstract class Clip {
     lines.push("  bun run <script> --manifest");
     lines.push("  bun run <script> --mcp");
     lines.push("  bun run <script> --ipc");
+    lines.push("  bun run <script> --web [port]");
     lines.push("");
     lines.push("Commands:");
 
