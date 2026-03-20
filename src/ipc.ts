@@ -42,6 +42,14 @@ function createErrorResponse(id: unknown, message: string, code: string): IPCRes
   };
 }
 
+function createManifestOutput(clip: Clip): { name: string; domain: string; commands: string[] } {
+  return {
+    name: clip.name,
+    domain: clip.domain,
+    commands: Array.from(clip.getCommands().keys()),
+  };
+}
+
 async function handleRequestLine(clip: Clip, line: string): Promise<void> {
   let request: IPCRequest;
 
@@ -56,6 +64,14 @@ async function handleRequestLine(clip: Clip, line: string): Promise<void> {
 
   if (typeof command !== "string" || command.length === 0) {
     writeResponse(createErrorResponse(id, "Request command must be a non-empty string", "INVALID_REQUEST"));
+    return;
+  }
+
+  if (command === "manifest") {
+    writeResponse({
+      id,
+      output: createManifestOutput(clip),
+    });
     return;
   }
 

@@ -32,11 +32,25 @@ async function invokeCapability(
     body: JSON.stringify({ capability, command, input }),
   });
 
-  const data = await res.json() as Record<string, unknown>;
+  const text = await res.text();
+  if (!text || text.trim().length === 0) {
+    throw new Error(`Capability ${capability}.${command}: empty response (HTTP ${res.status})`);
+  }
+
+  let data: Record<string, unknown>;
+  try {
+    data = JSON.parse(text) as Record<string, unknown>;
+  } catch {
+    throw new Error(`Capability ${capability}.${command}: invalid JSON response`);
+  }
+
+  if (!data || typeof data !== "object") {
+    throw new Error(`Capability ${capability}.${command}: unexpected response format`);
+  }
 
   if (data.error) {
-    const err = data.error as { message?: string };
-    throw new Error(err.message || `Capability ${capability}.${command} failed`);
+    const err = typeof data.error === "object" ? (data.error as { message?: string }).message : String(data.error);
+    throw new Error(err || `Capability ${capability}.${command} failed`);
   }
 
   return data;
