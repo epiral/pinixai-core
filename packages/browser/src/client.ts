@@ -12,17 +12,34 @@ import type {
   WaitForSelectorOptions,
 } from "./types";
 
+function getPinixUrl(): string {
+  const url = process.env.PINIX_URL;
+  if (!url) {
+    throw new Error('Capability "browser" not available. Is pinixd running? (PINIX_URL not set)');
+  }
+  return url;
+}
+
 async function invokeCapability(
   capability: string,
   command: string,
   input: unknown,
 ): Promise<unknown> {
-  void capability;
-  void command;
-  void input;
+  const baseUrl = getPinixUrl();
+  const res = await fetch(`${baseUrl}/api/capability/invoke`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ capability, command, input }),
+  });
 
-  // MVP: connect to pinixd via PINIX_RUNTIME_SOCKET or a globally registered runtime.
-  throw new Error(`Capability "${capability}" not available. Is pinixd running?`);
+  const data = await res.json() as Record<string, unknown>;
+
+  if (data.error) {
+    const err = data.error as { message?: string };
+    throw new Error(err.message || `Capability ${capability}.${command} failed`);
+  }
+
+  return data;
 }
 
 export const browser: BrowserCapability = {
