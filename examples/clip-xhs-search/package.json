@@ -1,0 +1,7 @@
+{
+  "name": "clip-xhs-search",
+  "version": "0.1.0",
+  "description": "小红书搜索 Clip，使用 @pinixai/browser 能力",
+  "type": "module",
+  "dependencies": {}
+}
