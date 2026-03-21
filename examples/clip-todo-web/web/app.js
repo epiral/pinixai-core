@@ -6,7 +6,7 @@ const status = document.querySelector("#status");
 const refreshButton = document.querySelector("#refresh-button");
 
 async function callCommand(command, input = {}) {
-  const response = await fetch(`/api/${command}`, {
+  const response = await fetch(`api/${command}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
