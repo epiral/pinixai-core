@@ -1,176 +1,161 @@
-import type { z } from "zod";
 import type { Clip } from "./clip";
+import { createIPCManifest } from "./manifest";
 
-type IPCRequest = {
-  id?: unknown;
-  command?: unknown;
+// === IPC Protocol Types ===
+
+type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done";
+
+interface BaseMessage {
+  type: MessageType;
+  id?: string;
+}
+
+interface RegisterMessage extends BaseMessage {
+  type: "register";
+  manifest: { name: string; domain: string; commands: string[]; dependencies: string[] };
+}
+
+interface InvokeMessage extends BaseMessage {
+  type: "invoke";
+  id: string;
+  command?: string;
+  clip?: string;
   input?: unknown;
-};
-
-type IPCResponse =
-  | {
-      id: unknown;
-      output: unknown;
-    }
-  | {
-      id: unknown;
-      error: {
-        message: string;
-        code: string;
-      };
-    };
-
-function toErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : String(error);
 }
 
-function writeResponse(response: IPCResponse): void {
-  process.stdout.write(`${JSON.stringify(response)}\n`);
+interface ResultMessage extends BaseMessage {
+  type: "result";
+  id: string;
+  output: unknown;
 }
 
-function isObject(value: unknown): value is Record<string, unknown> {
-  return value !== null && typeof value === "object";
+interface ErrorMessage extends BaseMessage {
+  type: "error";
+  id: string;
+  error: string;
 }
 
-function createErrorResponse(id: unknown, message: string, code: string): IPCResponse {
-  return {
-    id,
-    error: {
-      message,
-      code,
-    },
-  };
+// === State ===
+
+const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+let idCounter = 0;
+
+function nextId(): string {
+  return `c${++idCounter}`;
 }
 
-function createManifestOutput(clip: Clip): { name: string; domain: string; commands: string[] } {
-  return {
-    name: clip.name,
-    domain: clip.domain,
-    commands: Array.from(clip.getCommands().keys()),
-  };
+function send(msg: Record<string, unknown>): void {
+  process.stdout.write(JSON.stringify(msg) + "\n");
 }
 
-async function handleRequestLine(clip: Clip, line: string): Promise<void> {
-  let request: IPCRequest;
+// === Public API ===
 
-  try {
-    request = JSON.parse(line) as IPCRequest;
-  } catch (error) {
-    writeResponse(createErrorResponse(null, `Invalid JSON: ${toErrorMessage(error)}`, "INVALID_JSON"));
-    return;
-  }
-
-  const { id = null, command, input } = request;
-
-  if (typeof command !== "string" || command.length === 0) {
-    writeResponse(createErrorResponse(id, "Request command must be a non-empty string", "INVALID_REQUEST"));
-    return;
-  }
-
-  if (command === "manifest") {
-    writeResponse({
-      id,
-      output: createManifestOutput(clip),
-    });
-    return;
-  }
-
-  const commandHandler = clip.getCommands().get(command);
-
-  if (!commandHandler) {
-    writeResponse(createErrorResponse(id, `Unknown command: ${command}`, "COMMAND_NOT_FOUND"));
-    return;
-  }
-
-  if (!isObject(input)) {
-    writeResponse(createErrorResponse(id, "Request input must be an object", "INVALID_INPUT"));
-    return;
-  }
-
-  try {
-    const parsedInput = await commandHandler.input.parseAsync(input) as z.infer<typeof commandHandler.input>;
-    const output = await commandHandler.fn(parsedInput);
-    const parsedOutput = await commandHandler.output.parseAsync(output);
-
-    writeResponse({
-      id,
-      output: parsedOutput,
-    });
-  } catch (error) {
-    writeResponse(createErrorResponse(id, toErrorMessage(error), "COMMAND_ERROR"));
-  }
+export async function invoke(clip: string, command: string, input: unknown): Promise<unknown> {
+  const id = nextId();
+  return new Promise((resolve, reject) => {
+    pendingInvokes.set(id, { resolve, reject });
+    send({ id, type: "invoke", clip, command, input });
+  });
 }
 
-function redirectConsoleLogToStderr(): void {
-  console.log = (...args: unknown[]) => {
-    const serialized = args
-      .map((arg) => {
-        if (typeof arg === "string") {
-          return arg;
-        }
-
-        try {
-          return JSON.stringify(arg);
-        } catch {
-          return String(arg);
-        }
-      })
-      .join(" ");
-
-    process.stderr.write(`${serialized}\n`);
-  };
-}
+// === IPC Server ===
 
 export async function serveIPC(clip: Clip): Promise<void> {
-  redirectConsoleLogToStderr();
+  // Redirect console.log to stderr so stdout is reserved for IPC
+  const origLog = console.log;
+  console.log = (...args: unknown[]) => {
+    process.stderr.write(args.map(String).join(" ") + "\n");
+  };
 
-  const reader = Bun.stdin.stream().getReader();
-  const decoder = new TextDecoder();
-  let buffer = "";
+  // Register with pinixd
+  const manifest = createIPCManifest(clip);
+  send({ type: "register", manifest });
 
-  try {
-    while (true) {
-      const { done, value } = await reader.read();
+  // Read messages from stdin
+  const reader = createLineReader(process.stdin);
+  const commands = clip.getCommands();
 
-      if (done) {
+  for await (const line of reader) {
+    let msg: BaseMessage;
+    try {
+      msg = JSON.parse(line) as BaseMessage;
+    } catch {
+      process.stderr.write(`[ipc] invalid JSON: ${line}\n`);
+      continue;
+    }
+
+    if (!msg.type) {
+      process.stderr.write(`[ipc] message missing type: ${line}\n`);
+      continue;
+    }
+
+    switch (msg.type) {
+      case "registered":
+        // Registration confirmed
+        break;
+
+      case "invoke": {
+        const inv = msg as InvokeMessage;
+        handleInvoke(inv, commands);
         break;
       }
 
-      buffer += decoder.decode(value, { stream: true });
-
-      while (true) {
-        const newlineIndex = buffer.indexOf("\n");
-
-        if (newlineIndex === -1) {
-          break;
+      case "result": {
+        const res = msg as ResultMessage;
+        const pending = pendingInvokes.get(res.id);
+        if (pending) {
+          pendingInvokes.delete(res.id);
+          pending.resolve(res.output);
         }
-
-        const line = buffer.slice(0, newlineIndex).trim();
-        buffer = buffer.slice(newlineIndex + 1);
-
-        if (line.length === 0) {
-          continue;
-        }
-
-        try {
-          await handleRequestLine(clip, line);
-        } catch (error) {
-          writeResponse(createErrorResponse(null, toErrorMessage(error), "INTERNAL_ERROR"));
-        }
+        break;
       }
-    }
 
-    buffer += decoder.decode();
-    const tail = buffer.trim();
-
-    if (tail.length > 0) {
-      try {
-        await handleRequestLine(clip, tail);
-      } catch (error) {
-        writeResponse(createErrorResponse(null, toErrorMessage(error), "INTERNAL_ERROR"));
+      case "error": {
+        const err = msg as ErrorMessage;
+        const pending = pendingInvokes.get(err.id);
+        if (pending) {
+          pendingInvokes.delete(err.id);
+          pending.reject(new Error(err.error));
+        }
+        break;
       }
+
+      default:
+        process.stderr.write(`[ipc] unknown message type: ${msg.type}\n`);
     }
-  } finally {
-    reader.releaseLock();
   }
+}
+
+async function handleInvoke(
+  msg: InvokeMessage,
+  commands: ReturnType<Clip["getCommands"]>,
+): Promise<void> {
+  const cmd = commands.get(msg.command ?? "");
+  if (!cmd) {
+    send({ id: msg.id, type: "error", error: `unknown command: ${msg.command}` });
+    return;
+  }
+
+  try {
+    const parsed = cmd.input.parse(msg.input ?? {});
+    const output = await cmd.fn(parsed);
+    send({ id: msg.id, type: "result", output });
+  } catch (err) {
+    send({ id: msg.id, type: "error", error: err instanceof Error ? err.message : String(err) });
+  }
+}
+
+// === Line Reader ===
+
+async function* createLineReader(stream: NodeJS.ReadableStream): AsyncGenerator<string> {
+  let buffer = "";
+  for await (const chunk of stream) {
+    buffer += chunk.toString();
+    const lines = buffer.split("\n");
+    buffer = lines.pop() ?? "";
+    for (const line of lines) {
+      if (line.trim()) yield line;
+    }
+  }
+  if (buffer.trim()) yield buffer;
 }

@@ -1,6 +1,13 @@
 import { z, type ZodType } from "zod";
 import type { Clip } from "./clip";
 
+export interface IPCManifest {
+  name: string;
+  domain: string;
+  commands: string[];
+  dependencies: string[];
+}
+
 function formatLiteralValue(value: unknown): string {
   return JSON.stringify(value);
 }
@@ -138,4 +145,17 @@ export function generateManifest(clip: Clip): string {
   }
 
   return lines.join("\n");
+}
+
+export function createIPCManifest(clip: Clip): IPCManifest {
+  const dependencies = (clip as Clip & { dependencies?: unknown }).dependencies;
+
+  return {
+    name: clip.name,
+    domain: clip.domain,
+    commands: Array.from(clip.getCommands().keys()),
+    dependencies: Array.isArray(dependencies)
+      ? dependencies.filter((dependency): dependency is string => typeof dependency === "string")
+      : [],
+  };
 }
