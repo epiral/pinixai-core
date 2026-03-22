@@ -1,4 +1,5 @@
 import type { Clip } from "./clip";
+import type { Stream } from "./handler";
 import { createIPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
@@ -138,7 +139,21 @@ async function handleInvoke(
 
   try {
     const parsed = cmd.input.parse(msg.input ?? {});
-    const output = await cmd.fn(parsed);
+    let streamed = false;
+    const stream: Stream = {
+      chunk(data: unknown): void {
+        streamed = true;
+        send({ id: msg.id, type: "chunk", output: data });
+      },
+    };
+
+    const output = await cmd.fn(parsed, stream);
+
+    if (streamed) {
+      send({ id: msg.id, type: "done" });
+      return;
+    }
+
     send({ id: msg.id, type: "result", output });
   } catch (err) {
     send({ id: msg.id, type: "error", error: err instanceof Error ? err.message : String(err) });
