@@ -1,0 +1,16 @@
+{
+  "name": "todo-web",
+  "version": "0.1.0",
+  "type": "clip",
+  "description": "待办管理（Web UI 版）",
+  "domain": "productivity",
+  "runtime": "bun",
+  "main": "index.ts",
+  "web": "web/",
+  "commands": [
+    {"name": "add", "description": "添加待办"},
+    {"name": "delete", "description": "删除待办"},
+    {"name": "list", "description": "列出所有待办"}
+  ],
+  "author": {"name": "epiral"}
+}

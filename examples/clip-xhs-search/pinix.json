@@ -1,0 +1,17 @@
+{
+  "name": "xhs-search",
+  "version": "0.1.0",
+  "type": "clip",
+  "description": "小红书搜索",
+  "domain": "social",
+  "runtime": "bun",
+  "main": "index.ts",
+  "commands": [
+    {"name": "search", "description": "搜索笔记"},
+    {"name": "note", "description": "获取笔记详情"}
+  ],
+  "dependencies": {
+    "browser": "^1.0.0"
+  },
+  "author": {"name": "epiral"}
+}
