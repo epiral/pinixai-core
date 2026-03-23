@@ -6,9 +6,10 @@ import type { Clip } from "./clip";
 export interface IPCManifest {
   name: string;
   domain: string;
+  description?: string;
   commands: string[];
   dependencies: string[];
-  pkg?: string;
+  package?: string;
   version?: string;
 }
 
@@ -169,12 +170,12 @@ function findJsonFile(filename: string): Record<string, unknown> | null {
   return null;
 }
 
-function resolvePackageInfo(): { pkg?: string; version?: string } {
+function resolvePackageInfo(): { package?: string; version?: string } {
   const pinixJson = findJsonFile("pinix.json");
   const packageJson = findJsonFile("package.json");
 
   return {
-    pkg: asString(pinixJson?.name) ?? asString(packageJson?.name),
+    package: asString(pinixJson?.name) ?? asString(packageJson?.name),
     version: asString(pinixJson?.version) ?? asString(packageJson?.version),
   };
 }
@@ -184,14 +185,13 @@ function asString(value: unknown): string | undefined {
 }
 
 export function createIPCManifest(clip: Clip): IPCManifest {
-  const { pkg, version } = resolvePackageInfo();
+  const pkgInfo = resolvePackageInfo();
 
   return {
     name: clip.name,
     domain: clip.domain,
     commands: Array.from(clip.getCommands().keys()),
     dependencies: clip.dependencies,
-    pkg,
-    version,
+    ...pkgInfo,
   };
 }
