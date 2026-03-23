@@ -1,3 +1,5 @@
+import { existsSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { z, type ZodType } from "zod";
 import type { Clip } from "./clip";
 
@@ -6,6 +8,8 @@ export interface IPCManifest {
   domain: string;
   commands: string[];
   dependencies: string[];
+  pkg?: string;
+  version?: string;
 }
 
 function formatLiteralValue(value: unknown): string {
@@ -147,11 +151,47 @@ export function generateManifest(clip: Clip): string {
   return lines.join("\n");
 }
 
+function findJsonFile(filename: string): Record<string, unknown> | null {
+  let dir = dirname(Bun.main);
+  for (;;) {
+    const filePath = join(dir, filename);
+    if (existsSync(filePath)) {
+      try {
+        return JSON.parse(readFileSync(filePath, "utf8")) as Record<string, unknown>;
+      } catch {
+        return null;
+      }
+    }
+    const parent = dirname(dir);
+    if (parent === dir) break;
+    dir = parent;
+  }
+  return null;
+}
+
+function resolvePackageInfo(): { pkg?: string; version?: string } {
+  const pinixJson = findJsonFile("pinix.json");
+  const packageJson = findJsonFile("package.json");
+
+  return {
+    pkg: asString(pinixJson?.name) ?? asString(packageJson?.name),
+    version: asString(pinixJson?.version) ?? asString(packageJson?.version),
+  };
+}
+
+function asString(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
+
 export function createIPCManifest(clip: Clip): IPCManifest {
+  const { pkg, version } = resolvePackageInfo();
+
   return {
     name: clip.name,
     domain: clip.domain,
     commands: Array.from(clip.getCommands().keys()),
     dependencies: clip.dependencies,
+    pkg,
+    version,
   };
 }
