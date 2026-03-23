@@ -23,6 +23,7 @@ export abstract class Clip {
   abstract name: string;
   abstract domain: string;
   abstract patterns: string[];
+  dependencies: string[] = [];
   entities: Record<string, z.ZodObject<any>> = {};
 
   protected readonly commands = new Map<string, HandlerDef>();
@@ -52,9 +53,9 @@ export abstract class Clip {
         return serveHTTP(this);
       }
 
-      const port = Number.parseInt(portArg, 10);
+      const port = Number(portArg);
 
-      if (Number.isNaN(port)) {
+      if (Number.isNaN(port) || !Number.isFinite(port) || port !== Math.floor(port) || port < 0) {
         console.error(`Invalid port: ${portArg}`);
         return;
       }

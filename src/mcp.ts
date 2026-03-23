@@ -1,8 +1,11 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
 import type { Clip } from "./clip";
+import { redirectConsoleToStderr } from "./ipc";
 
 export async function serveMCP(clip: Clip): Promise<void> {
+  // Redirect console.log to stderr so stdout is reserved for MCP JSON-RPC
+  redirectConsoleToStderr();
   const server = new McpServer({
     name: clip.name,
     version: "1.0.0",

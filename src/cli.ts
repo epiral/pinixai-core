@@ -93,9 +93,9 @@ function parseScalarValue(value: string, schema: ZodType): unknown {
   const normalized = unwrapSchema(schema);
 
   if (normalized instanceof z.ZodNumber) {
-    const parsed = Number.parseInt(value, 10);
+    const parsed = Number(value);
 
-    if (Number.isNaN(parsed)) {
+    if (Number.isNaN(parsed) || !Number.isFinite(parsed)) {
       throw new Error(`Invalid number value: ${value}`);
     }
 
@@ -111,9 +111,9 @@ function parseScalarValue(value: string, schema: ZodType): unknown {
     const literalValue = literalValues[0];
 
     if (typeof literalValue === "number") {
-      const parsed = Number.parseInt(value, 10);
+      const parsed = Number(value);
 
-      if (Number.isNaN(parsed)) {
+      if (Number.isNaN(parsed) || !Number.isFinite(parsed)) {
         throw new Error(`Invalid number value: ${value}`);
       }
 

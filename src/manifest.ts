@@ -148,14 +148,10 @@ export function generateManifest(clip: Clip): string {
 }
 
 export function createIPCManifest(clip: Clip): IPCManifest {
-  const dependencies = (clip as Clip & { dependencies?: unknown }).dependencies;
-
   return {
     name: clip.name,
     domain: clip.domain,
     commands: Array.from(clip.getCommands().keys()),
-    dependencies: Array.isArray(dependencies)
-      ? dependencies.filter((dependency): dependency is string => typeof dependency === "string")
-      : [],
+    dependencies: clip.dependencies,
   };
 }

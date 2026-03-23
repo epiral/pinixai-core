@@ -1,3 +1,4 @@
+import { StringDecoder } from "node:string_decoder";
 import type { Clip } from "./clip";
 import type { Stream } from "./handler";
 import { createIPCManifest } from "./manifest";
@@ -36,6 +37,17 @@ interface ErrorMessage extends BaseMessage {
   error: string;
 }
 
+interface ChunkMessage extends BaseMessage {
+  type: "chunk";
+  id: string;
+  output: unknown;
+}
+
+interface DoneMessage extends BaseMessage {
+  type: "done";
+  id: string;
+}
+
 // === State ===
 
 const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
@@ -59,14 +71,22 @@ export async function invoke(clip: string, command: string, input: unknown): Pro
   });
 }
 
+// === Stdout Protection ===
+
+export function redirectConsoleToStderr(): void {
+  const write = (...args: unknown[]) => {
+    process.stderr.write(args.map(String).join(" ") + "\n");
+  };
+  console.log = write;
+  console.info = write;
+  console.debug = write;
+}
+
 // === IPC Server ===
 
 export async function serveIPC(clip: Clip): Promise<void> {
   // Redirect console.log to stderr so stdout is reserved for IPC
-  const origLog = console.log;
-  console.log = (...args: unknown[]) => {
-    process.stderr.write(args.map(String).join(" ") + "\n");
-  };
+  redirectConsoleToStderr();
 
   // Register with pinixd
   const manifest = createIPCManifest(clip);
@@ -121,10 +141,32 @@ export async function serveIPC(clip: Clip): Promise<void> {
         break;
       }
 
+      case "chunk": {
+        // Streaming chunks — currently ignored on client side
+        // Future: could accumulate or forward to a stream callback
+        break;
+      }
+
+      case "done": {
+        const done = msg as DoneMessage;
+        const pending = pendingInvokes.get(done.id);
+        if (pending) {
+          pendingInvokes.delete(done.id);
+          pending.resolve(undefined);
+        }
+        break;
+      }
+
       default:
         process.stderr.write(`[ipc] unknown message type: ${msg.type}\n`);
     }
   }
+
+  // Clean up pending invokes on EOF
+  for (const [id, pending] of pendingInvokes) {
+    pending.reject(new Error("IPC connection closed"));
+  }
+  pendingInvokes.clear();
 }
 
 async function handleInvoke(
@@ -138,7 +180,7 @@ async function handleInvoke(
   }
 
   try {
-    const parsed = cmd.input.parse(msg.input ?? {});
+    const parsed = await cmd.input.parseAsync(msg.input ?? {});
     let streamed = false;
     const stream: Stream = {
       chunk(data: unknown): void {
@@ -154,7 +196,8 @@ async function handleInvoke(
       return;
     }
 
-    send({ id: msg.id, type: "result", output });
+    const validatedOutput = await cmd.output.parseAsync(output);
+    send({ id: msg.id, type: "result", output: validatedOutput });
   } catch (err) {
     send({ id: msg.id, type: "error", error: err instanceof Error ? err.message : String(err) });
   }
@@ -163,14 +206,17 @@ async function handleInvoke(
 // === Line Reader ===
 
 async function* createLineReader(stream: NodeJS.ReadableStream): AsyncGenerator<string> {
+  const decoder = new StringDecoder("utf8");
   let buffer = "";
   for await (const chunk of stream) {
-    buffer += chunk.toString();
+    buffer += decoder.write(chunk as Buffer);
     const lines = buffer.split("\n");
     buffer = lines.pop() ?? "";
     for (const line of lines) {
       if (line.trim()) yield line;
     }
   }
+  const remaining = decoder.end();
+  if (remaining) buffer += remaining;
   if (buffer.trim()) yield buffer;
 }

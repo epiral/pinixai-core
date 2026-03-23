@@ -1,4 +1,6 @@
-import { invoke } from "../../../src/index.ts";
+import { invoke } from "../../src/index.ts";
+// NOTE: When publishing, this should be changed to "@pinixai/core".
+// Using relative path for monorepo development compatibility.
 import type {
   BrowserCapability,
   ClickOptions,
