@@ -1,5 +1,5 @@
 import { dirname, join, resolve, sep } from "node:path";
-import type { Clip } from "./clip";
+import { getClipName, type Clip } from "./clip";
 import { zodToManifestType } from "./manifest";
 
 const CORS_HEADERS = {
@@ -249,5 +249,5 @@ export async function serveHTTP(clip: Clip, port = 3000): Promise<void> {
     fetch: (request) => handleRequest(clip, request),
   });
 
-  console.error(`Clip "${clip.name}" running at http://localhost:${server.port}`);
+  console.error(`Clip "${getClipName(clip) ?? clip.constructor.name}" running at http://localhost:${server.port}`);
 }

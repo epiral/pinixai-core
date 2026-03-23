@@ -1,7 +1,10 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { StringDecoder } from "node:string_decoder";
+import type { Binding, Bindings } from "./bindings";
 import type { Clip } from "./clip";
 import type { Stream } from "./handler";
-import { createIPCManifest } from "./manifest";
+import { createIPCManifest, type IPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
 
@@ -14,7 +17,12 @@ interface BaseMessage {
 
 interface RegisterMessage extends BaseMessage {
   type: "register";
-  manifest: { name: string; domain: string; commands: string[]; dependencies: string[] };
+  manifest: IPCManifest;
+}
+
+interface RegisteredMessage extends BaseMessage {
+  type: "registered";
+  alias?: string;
 }
 
 interface InvokeMessage extends BaseMessage {
@@ -23,6 +31,9 @@ interface InvokeMessage extends BaseMessage {
   command?: string;
   clip?: string;
   input?: unknown;
+  hub?: string;
+  hub_token?: string;
+  clip_token?: string;
 }
 
 interface ResultMessage extends BaseMessage {
@@ -52,6 +63,68 @@ interface DoneMessage extends BaseMessage {
 
 const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
 let idCounter = 0;
+let registeredAlias: string | undefined;
+const bindings = loadBindings();
+
+function loadBindings(): Bindings {
+  const bindingsPath = join(dirname(Bun.main), "bindings.json");
+
+  try {
+    const parsed = JSON.parse(readFileSync(bindingsPath, "utf8")) as unknown;
+
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
+      return {};
+    }
+
+    const loadedBindings: Bindings = {};
+    for (const [slot, value] of Object.entries(parsed)) {
+      const binding = normalizeBinding(value);
+      if (binding) {
+        loadedBindings[slot] = binding;
+      }
+    }
+
+    return loadedBindings;
+  } catch {
+    return {};
+  }
+}
+
+function normalizeBinding(value: unknown): Binding | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) {
+    return null;
+  }
+
+  const candidate = value as Record<string, unknown>;
+  const alias = asNonEmptyString(candidate.alias);
+
+  if (!alias) {
+    return null;
+  }
+
+  const binding: Binding = { alias };
+  const hub = asNonEmptyString(candidate.hub);
+  const hubToken = asNonEmptyString(candidate.hub_token);
+  const clipToken = asNonEmptyString(candidate.clip_token);
+
+  if (hub) {
+    binding.hub = hub;
+  }
+
+  if (hubToken) {
+    binding.hub_token = hubToken;
+  }
+
+  if (clipToken) {
+    binding.clip_token = clipToken;
+  }
+
+  return binding;
+}
+
+function asNonEmptyString(value: unknown): string | undefined {
+  return typeof value === "string" && value.length > 0 ? value : undefined;
+}
 
 function nextId(): string {
   return `c${++idCounter}`;
@@ -63,11 +136,22 @@ function send(msg: Record<string, unknown>): void {
 
 // === Public API ===
 
-export async function invoke(clip: string, command: string, input: unknown): Promise<unknown> {
+export async function invoke(slot: string, command: string, input: unknown): Promise<unknown> {
+  const binding = bindings[slot];
   const id = nextId();
+
   return new Promise((resolve, reject) => {
     pendingInvokes.set(id, { resolve, reject });
-    send({ id, type: "invoke", clip, command, input });
+    send({
+      id,
+      type: "invoke",
+      clip: binding?.alias ?? slot,
+      command,
+      input,
+      hub: binding?.hub,
+      hub_token: binding?.hub_token,
+      clip_token: binding?.clip_token,
+    });
   });
 }
 
@@ -112,7 +196,7 @@ export async function serveIPC(clip: Clip): Promise<void> {
 
     switch (msg.type) {
       case "registered":
-        // Registration confirmed
+        registeredAlias = asNonEmptyString((msg as RegisteredMessage).alias);
         break;
 
       case "invoke": {

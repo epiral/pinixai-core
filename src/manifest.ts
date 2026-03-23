@@ -1,14 +1,13 @@
 import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { z, type ZodType } from "zod";
-import type { Clip } from "./clip";
+import { getClipName, type Clip } from "./clip";
 
 export interface IPCManifest {
-  name: string;
   domain: string;
   description?: string;
   commands: string[];
-  dependencies: string[];
+  dependencies: Record<string, { package: string; version: string }>;
   package?: string;
   version?: string;
 }
@@ -99,11 +98,8 @@ export function zodToManifestType(schema: ZodType): string {
 }
 
 export function generateManifest(clip: Clip): string {
-  const lines = [
-    `Clip: ${clip.name}`,
-    `Domain: ${clip.domain}`,
-    "",
-  ];
+  const name = getClipName(clip);
+  const lines = name ? [`Clip: ${name}`, `Domain: ${clip.domain}`, ""] : [`Domain: ${clip.domain}`, ""];
 
   if (clip.patterns.length > 0) {
     lines.push("Patterns:");
@@ -188,7 +184,6 @@ export function createIPCManifest(clip: Clip): IPCManifest {
   const pkgInfo = resolvePackageInfo();
 
   return {
-    name: clip.name,
     domain: clip.domain,
     commands: Array.from(clip.getCommands().keys()),
     dependencies: clip.dependencies,

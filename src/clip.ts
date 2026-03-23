@@ -20,10 +20,9 @@ function isHandlerDef(value: unknown): value is HandlerDef {
 }
 
 export abstract class Clip {
-  abstract name: string;
   abstract domain: string;
   abstract patterns: string[];
-  dependencies: string[] = [];
+  dependencies: Record<string, { package: string; version: string }> = {};
   entities: Record<string, z.ZodObject<any>> = {};
 
   protected readonly commands = new Map<string, HandlerDef>();
@@ -102,8 +101,9 @@ export abstract class Clip {
   }
 
   printHelp(): string {
+    const name = getClipName(this);
     const lines: string[] = [
-      `${this.name} (${this.domain})`,
+      name ? `${name} (${this.domain})` : this.domain,
       "",
     ];
 
@@ -187,4 +187,9 @@ export abstract class Clip {
       clip.commandDescriptions.set(propertyKey, describe);
     }
   }
+}
+
+export function getClipName(clip: Clip): string | undefined {
+  const value = (clip as { name?: unknown }).name;
+  return typeof value === "string" && value.length > 0 ? value : undefined;
 }
