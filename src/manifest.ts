@@ -3,10 +3,17 @@ import { dirname, join } from "node:path";
 import { z, type ZodType } from "zod";
 import { getClipName, type Clip } from "./clip";
 
+export interface IPCCommandInfo {
+  name: string;
+  description?: string;
+  input?: string;
+  output?: string;
+}
+
 export interface IPCManifest {
   domain: string;
   description?: string;
-  commands: string[];
+  commands: IPCCommandInfo[];
   dependencies: Record<string, { package: string; version: string }>;
   package?: string;
   version?: string;
@@ -183,9 +190,26 @@ function asString(value: unknown): string | undefined {
 export function createIPCManifest(clip: Clip): IPCManifest {
   const pkgInfo = resolvePackageInfo();
 
+  const commands: IPCCommandInfo[] = [];
+
+  for (const [name, handler] of clip.getCommands()) {
+    const description = clip.getCommandDescription(name);
+    const cmd: IPCCommandInfo = { name };
+    if (description) cmd.description = description;
+
+    try {
+      cmd.input = JSON.stringify(z.toJSONSchema(handler.input));
+    } catch {}
+    try {
+      cmd.output = JSON.stringify(z.toJSONSchema(handler.output));
+    } catch {}
+
+    commands.push(cmd);
+  }
+
   return {
     domain: clip.domain,
-    commands: Array.from(clip.getCommands().keys()),
+    commands,
     dependencies: clip.dependencies,
     ...pkgInfo,
   };
