@@ -4,6 +4,6 @@ export { command } from "./command";
 export { handler, type HandlerDef, type Stream } from "./handler";
 export { serveHTTP } from "./http";
 export { serveIPC, invoke, redirectConsoleToStderr } from "./ipc";
-export type { IPCManifest } from "./manifest";
+export type { IPCCommandInfo, IPCManifest } from "./manifest";
 export { serveMCP } from "./mcp";
 export { z } from "zod";
