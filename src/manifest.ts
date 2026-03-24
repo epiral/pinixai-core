@@ -176,12 +176,11 @@ function findJsonFile(filename: string): Record<string, unknown> | null {
 }
 
 function resolvePackageInfo(): { package?: string; version?: string } {
-  const pinixJson = findJsonFile("pinix.json");
   const packageJson = findJsonFile("package.json");
 
   return {
-    package: asString(pinixJson?.name) ?? asString(packageJson?.name),
-    version: asString(pinixJson?.version) ?? asString(packageJson?.version),
+    package: asString(packageJson?.name),
+    version: asString(packageJson?.version),
   };
 }
 
