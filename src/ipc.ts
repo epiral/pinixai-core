@@ -4,11 +4,12 @@ import { StringDecoder } from "node:string_decoder";
 import type { Binding, Bindings } from "./bindings";
 import type { Clip } from "./clip";
 import type { Stream } from "./handler";
+import { hubInvoke } from "./hub";
 import { createIPCManifest, type IPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
 
-type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done";
+type MessageType = "register" | "registered" | "invoke";
 
 interface BaseMessage {
   type: MessageType;
@@ -36,33 +37,8 @@ interface InvokeMessage extends BaseMessage {
   clip_token?: string;
 }
 
-interface ResultMessage extends BaseMessage {
-  type: "result";
-  id: string;
-  output: unknown;
-}
-
-interface ErrorMessage extends BaseMessage {
-  type: "error";
-  id: string;
-  error: string;
-}
-
-interface ChunkMessage extends BaseMessage {
-  type: "chunk";
-  id: string;
-  output: unknown;
-}
-
-interface DoneMessage extends BaseMessage {
-  type: "done";
-  id: string;
-}
-
 // === State ===
 
-const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
-let idCounter = 0;
 let registeredAlias: string | undefined;
 const bindings = loadBindings();
 
@@ -126,10 +102,6 @@ function asNonEmptyString(value: unknown): string | undefined {
   return typeof value === "string" && value.length > 0 ? value : undefined;
 }
 
-function nextId(): string {
-  return `c${++idCounter}`;
-}
-
 function send(msg: Record<string, unknown>): void {
   process.stdout.write(JSON.stringify(msg) + "\n");
 }
@@ -138,21 +110,11 @@ function send(msg: Record<string, unknown>): void {
 
 export async function invoke(slot: string, command: string, input: unknown): Promise<unknown> {
   const binding = bindings[slot];
-  const id = nextId();
+  const clipName = binding?.alias ?? slot;
+  const clipToken = binding?.clip_token;
+  const hubUrl = binding?.hub;
 
-  return new Promise((resolve, reject) => {
-    pendingInvokes.set(id, { resolve, reject });
-    send({
-      id,
-      type: "invoke",
-      clip: binding?.alias ?? slot,
-      command,
-      input,
-      hub: binding?.hub,
-      hub_token: binding?.hub_token,
-      clip_token: binding?.clip_token,
-    });
-  });
+  return hubInvoke(clipName, command, input, clipToken, hubUrl);
 }
 
 // === Stdout Protection ===
@@ -232,53 +194,12 @@ export async function serveIPC(clip: Clip): Promise<void> {
         break;
       }
 
-      case "result": {
-        const res = msg as ResultMessage;
-        const pending = pendingInvokes.get(res.id);
-        if (pending) {
-          pendingInvokes.delete(res.id);
-          pending.resolve(res.output);
-        }
-        break;
-      }
-
-      case "error": {
-        const err = msg as ErrorMessage;
-        const pending = pendingInvokes.get(err.id);
-        if (pending) {
-          pendingInvokes.delete(err.id);
-          pending.reject(new Error(err.error));
-        }
-        break;
-      }
-
-      case "chunk": {
-        // Streaming chunks — currently ignored on client side
-        // Future: could accumulate or forward to a stream callback
-        break;
-      }
-
-      case "done": {
-        const done = msg as DoneMessage;
-        const pending = pendingInvokes.get(done.id);
-        if (pending) {
-          pendingInvokes.delete(done.id);
-          pending.resolve(undefined);
-        }
-        break;
-      }
-
       default:
         process.stderr.write(`[ipc] unknown message type: ${msg.type}\n`);
     }
   }
 
-  // Clean up pending invokes on EOF
   clearIdleTimer();
-  for (const [id, pending] of pendingInvokes) {
-    pending.reject(new Error("IPC connection closed"));
-  }
-  pendingInvokes.clear();
 }
 
 async function handleInvoke(
