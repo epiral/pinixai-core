@@ -1,6 +1,6 @@
 {
   "name": "@pinixai/core",
-  "version": "0.5.1",
+  "version": "0.6.2",
   "description": "Clip framework for Pinix — define once, run as CLI / MCP / Pinix bridge",
   "main": "src/index.ts",
   "module": "src/index.ts",
@@ -27,6 +27,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
+    "@bufbuild/protobuf": "^2.11.0",
+    "@connectrpc/connect": "^2.1.1",
+    "@connectrpc/connect-web": "^2.1.1",
     "@modelcontextprotocol/sdk": "^1.27.1",
     "zod": "^4.3.6"
   }
