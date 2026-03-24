@@ -15,6 +15,8 @@ export interface IPCManifest {
   description?: string;
   commands: IPCCommandInfo[];
   dependencies: Record<string, { package: string; version: string }>;
+  patterns?: string[];
+  entities?: Record<string, unknown>;
   package?: string;
   version?: string;
 }
@@ -207,10 +209,29 @@ export function createIPCManifest(clip: Clip): IPCManifest {
     commands.push(cmd);
   }
 
-  return {
+  const manifest: IPCManifest = {
     domain: clip.domain,
     commands,
     dependencies: clip.dependencies,
     ...pkgInfo,
   };
+
+  if (clip.patterns.length > 0) {
+    manifest.patterns = clip.patterns;
+  }
+
+  const entityEntries = Object.entries(clip.entities);
+  if (entityEntries.length > 0) {
+    const entities: Record<string, unknown> = {};
+    for (const [name, schema] of entityEntries) {
+      try {
+        entities[name] = z.toJSONSchema(schema);
+      } catch {}
+    }
+    if (Object.keys(entities).length > 0) {
+      manifest.entities = entities;
+    }
+  }
+
+  return manifest;
 }
