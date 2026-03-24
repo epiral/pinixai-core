@@ -176,9 +176,31 @@ export async function serveIPC(clip: Clip): Promise<void> {
   const manifest = createIPCManifest(clip);
   send({ type: "register", manifest });
 
+  // Idle timeout management
+  const idleTimeout = (clip as Clip & { idleTimeout?: number }).idleTimeout ?? 30_000;
+  let inflight = 0;
+  let idleTimer: ReturnType<typeof setTimeout> | null = null;
+
+  function clearIdleTimer(): void {
+    if (idleTimer !== null) {
+      clearTimeout(idleTimer);
+      idleTimer = null;
+    }
+  }
+
+  function resetIdleTimer(): void {
+    clearIdleTimer();
+    if (inflight > 0) return;
+    if (!Number.isFinite(idleTimeout) || idleTimeout < 0) return;
+    idleTimer = setTimeout(() => process.exit(0), idleTimeout);
+  }
+
   // Read messages from stdin
   const reader = createLineReader(process.stdin);
   const commands = clip.getCommands();
+
+  // Start idle timer after registration
+  resetIdleTimer();
 
   for await (const line of reader) {
     let msg: BaseMessage;
@@ -200,8 +222,13 @@ export async function serveIPC(clip: Clip): Promise<void> {
         break;
 
       case "invoke": {
+        clearIdleTimer();
+        inflight++;
         const inv = msg as InvokeMessage;
-        handleInvoke(inv, commands);
+        handleInvoke(inv, commands).finally(() => {
+          inflight--;
+          resetIdleTimer();
+        });
         break;
       }
 
@@ -247,6 +274,7 @@ export async function serveIPC(clip: Clip): Promise<void> {
   }
 
   // Clean up pending invokes on EOF
+  clearIdleTimer();
   for (const [id, pending] of pendingInvokes) {
     pending.reject(new Error("IPC connection closed"));
   }

@@ -25,6 +25,14 @@ export abstract class Clip {
   dependencies: Record<string, { package: string; version: string }> = {};
   entities: Record<string, z.ZodObject<any>> = {};
 
+  /**
+   * How long (ms) the process stays alive after the last invoke completes.
+   * - `30_000` (default): exit after 30s idle
+   * - `0`: exit immediately after each invoke
+   * - `Infinity`: never exit (persistent)
+   */
+  idleTimeout: number = 30_000;
+
   protected readonly commands = new Map<string, HandlerDef>();
   protected readonly commandDescriptions = new Map<string, string>();
 
