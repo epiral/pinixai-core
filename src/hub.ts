@@ -2,11 +2,9 @@ import { createClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { HubService, type ClipInfo } from "./gen/hub_pb";
 
-const PINIX_URL = process.env.PINIX_URL ?? "http://127.0.0.1:9000";
-
 function getTransport(hubUrl?: string) {
   return createConnectTransport({
-    baseUrl: hubUrl ?? PINIX_URL,
+    baseUrl: hubUrl ?? process.env.PINIX_URL ?? "http://127.0.0.1:9000",
   });
 }
 
