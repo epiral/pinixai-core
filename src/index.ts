@@ -3,7 +3,7 @@ export type { Binding, Bindings } from "./bindings";
 export { command } from "./command";
 export { handler, type HandlerDef, type Stream } from "./handler";
 export { serveHTTP } from "./http";
-export { hubListClips } from "./hub";
+export { hubInvoke, hubListClips } from "./hub";
 export { serveIPC, invoke, redirectConsoleToStderr } from "./ipc";
 export type { IPCCommandInfo, IPCManifest } from "./manifest";
 export { serveMCP } from "./mcp";
