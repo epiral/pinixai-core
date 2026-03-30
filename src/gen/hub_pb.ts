@@ -10,7 +10,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file pinix/v2/hub.proto.
  */
 export const file_pinix_v2_hub: GenFile = /*@__PURE__*/
-  fileDesc("ChJwaW5peC92Mi9odWIucHJvdG8SCHBpbml4LnYyIikKCEh1YkVycm9yEgwKBGNvZGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCSJPCgtDb21tYW5kSW5mbxIMCgRuYW1lGAEgASgJEhMKC2Rlc2NyaXB0aW9uGAIgASgJEg0KBWlucHV0GAMgASgJEg4KBm91dHB1dBgEIAEoCSKDAgoIQ2xpcEluZm8SDAoEbmFtZRgBIAEoCRIPCgdwYWNrYWdlGAIgASgJEg8KB3ZlcnNpb24YAyABKAkSEAoIcHJvdmlkZXIYBCABKAkSDgoGZG9tYWluGAUgASgJEicKCGNvbW1hbmRzGAYgAygLMhUucGluaXgudjIuQ29tbWFuZEluZm8SDwoHaGFzX3dlYhgHIAEoCBIXCg90b2tlbl9wcm90ZWN0ZWQYCCABKAgSFAoMZGVwZW5kZW5jaWVzGAkgAygJEiQKBnN0YXR1cxgKIAEoDjIULnBpbml4LnYyLkNsaXBTdGF0dXMSFgoOc3RhdHVzX21lc3NhZ2UYCyABKAkirgIKDENsaXBNYW5pZmVzdBIMCgRuYW1lGAEgASgJEg8KB3BhY2thZ2UYAiABKAkSDwoHdmVyc2lvbhgDIAEoCRIOCgZkb21haW4YBCABKAkSEwoLZGVzY3JpcHRpb24YBSABKAkSJwoIY29tbWFuZHMYBiADKAsyFS5waW5peC52Mi5Db21tYW5kSW5mbxIUCgxkZXBlbmRlbmNpZXMYByADKAkSDwoHaGFzX3dlYhgIIAEoCBIQCghwYXR0ZXJucxgJIAMoCRI2CghlbnRpdGllcxgKIAMoCzIkLnBpbml4LnYyLkNsaXBNYW5pZmVzdC5FbnRpdGllc0VudHJ5Gi8KDUVudGl0aWVzRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ASJZCgxQcm92aWRlckluZm8SDAoEbmFtZRgBIAEoCRIWCg5hY2NlcHRzX21hbmFnZRgCIAEoCBINCgVjbGlwcxgDIAMoCRIUCgxjb25uZWN0ZWRfYXQYBCABKAMiWAoRQ2xpcFN0YXR1c0NoYW5nZWQSDAoEbmFtZRgBIAEoCRIkCgZzdGF0dXMYAiABKA4yFC5waW5peC52Mi5DbGlwU3RhdHVzEg8KB21lc3NhZ2UYAyABKAki8gIKD1Byb3ZpZGVyTWVzc2FnZRItCghyZWdpc3RlchgBIAEoCzIZLnBpbml4LnYyLlJlZ2lzdGVyUmVxdWVzdEgAEikKCmNsaXBfYWRkZWQYAiABKAsyEy5waW5peC52Mi5DbGlwQWRkZWRIABItCgxjbGlwX3JlbW92ZWQYAyABKAsyFS5waW5peC52Mi5DbGlwUmVtb3ZlZEgAEi8KDWludm9rZV9yZXN1bHQYBCABKAsyFi5waW5peC52Mi5JbnZva2VSZXN1bHRIABIjCgRwaW5nGAUgASgLMhMucGluaXgudjIuSGVhcnRiZWF0SAASOQoTZ2V0X2NsaXBfd2ViX3Jlc3VsdBgHIAEoCzIaLnBpbml4LnYyLkdldENsaXBXZWJSZXN1bHRIABI6ChNjbGlwX3N0YXR1c19jaGFuZ2VkGAggASgLMhsucGluaXgudjIuQ2xpcFN0YXR1c0NoYW5nZWRIAEIJCgdwYXlsb2FkIpQCCgpIdWJNZXNzYWdlEjcKEXJlZ2lzdGVyX3Jlc3BvbnNlGAEgASgLMhoucGluaXgudjIuUmVnaXN0ZXJSZXNwb25zZUgAEjEKDmludm9rZV9jb21tYW5kGAIgASgLMhcucGluaXgudjIuSW52b2tlQ29tbWFuZEgAEi0KDGludm9rZV9pbnB1dBgDIAEoCzIVLnBpbml4LnYyLkludm9rZUlucHV0SAASIwoEcG9uZxgFIAEoCzITLnBpbml4LnYyLkhlYXJ0YmVhdEgAEjsKFGdldF9jbGlwX3dlYl9jb21tYW5kGAYgASgLMhsucGluaXgudjIuR2V0Q2xpcFdlYkNvbW1hbmRIAEIJCgdwYXlsb2FkItMBCg5SdW50aW1lTWVzc2FnZRItCghyZWdpc3RlchgBIAEoCzIZLnBpbml4LnYyLlJ1bnRpbWVSZWdpc3RlckgAEjEKDmluc3RhbGxfcmVzdWx0GAIgASgLMhcucGluaXgudjIuSW5zdGFsbFJlc3VsdEgAEi8KDXJlbW92ZV9yZXN1bHQYAyABKAsyFi5waW5peC52Mi5SZW1vdmVSZXN1bHRIABIjCgRwaW5nGAQgASgLMhMucGluaXgudjIuSGVhcnRiZWF0SABCCQoHcGF5bG9hZCLrAQoRSHViUnVudGltZU1lc3NhZ2USPgoRcmVnaXN0ZXJfcmVzcG9uc2UYASABKAsyIS5waW5peC52Mi5SdW50aW1lUmVnaXN0ZXJSZXNwb25zZUgAEjMKD2luc3RhbGxfY29tbWFuZBgCIAEoCzIYLnBpbml4LnYyLkluc3RhbGxDb21tYW5kSAASMQoOcmVtb3ZlX2NvbW1hbmQYAyABKAsyFy5waW5peC52Mi5SZW1vdmVDb21tYW5kSAASIwoEcG9uZxgEIAEoCzITLnBpbml4LnYyLkhlYXJ0YmVhdEgAQgkKB3BheWxvYWQiUwoPUmVnaXN0ZXJSZXF1ZXN0EhUKDXByb3ZpZGVyX25hbWUYASABKAkSKQoFY2xpcHMYAyADKAsyGi5waW5peC52Mi5DbGlwUmVnaXN0cmF0aW9uIs0CChBDbGlwUmVnaXN0cmF0aW9uEg0KBWFsaWFzGAEgASgJEg8KB3BhY2thZ2UYAiABKAkSDwoHdmVyc2lvbhgDIAEoCRIOCgZkb21haW4YBCABKAkSJwoIY29tbWFuZHMYBSADKAsyFS5waW5peC52Mi5Db21tYW5kSW5mbxIPCgdoYXNfd2ViGAYgASgIEhQKDGRlcGVuZGVuY2llcxgHIAMoCRIXCg90b2tlbl9wcm90ZWN0ZWQYCCABKAgSEAoEbmFtZRgJIAEoCUICGAESEAoIcGF0dGVybnMYCiADKAkSOgoIZW50aXRpZXMYCyADKAsyKC5waW5peC52Mi5DbGlwUmVnaXN0cmF0aW9uLkVudGl0aWVzRW50cnkaLwoNRW50aXRpZXNFbnRyeRILCgNrZXkYASABKAkSDQoFdmFsdWUYAiABKAk6AjgBIkkKCUNsaXBBZGRlZBIoCgRjbGlwGAEgASgLMhoucGluaXgudjIuQ2xpcFJlZ2lzdHJhdGlvbhISCgpyZXF1ZXN0X2lkGAIgASgJIi8KC0NsaXBSZW1vdmVkEgwKBG5hbWUYASABKAkSEgoKcmVxdWVzdF9pZBgCIAEoCSJjCgxJbnZva2VSZXN1bHQSEgoKcmVxdWVzdF9pZBgBIAEoCRIOCgZvdXRwdXQYAiABKAwSIQoFZXJyb3IYAyABKAsyEi5waW5peC52Mi5IdWJFcnJvchIMCgRkb25lGAQgASgIIn8KEUdldENsaXBXZWJDb21tYW5kEhIKCnJlcXVlc3RfaWQYASABKAkSEQoJY2xpcF9uYW1lGAIgASgJEgwKBHBhdGgYAyABKAkSDgoGb2Zmc2V0GAQgASgDEg4KBmxlbmd0aBgFIAEoAxIVCg1pZl9ub25lX21hdGNoGAYgASgJIqgBChBHZXRDbGlwV2ViUmVzdWx0EhIKCnJlcXVlc3RfaWQYASABKAkSDwoHY29udGVudBgCIAEoDBIUCgxjb250ZW50X3R5cGUYAyABKAkSDAoEZXRhZxgEIAEoCRISCgp0b3RhbF9zaXplGAUgASgDEhQKDG5vdF9tb2RpZmllZBgGIAEoCBIhCgVlcnJvchgHIAEoCzISLnBpbml4LnYyLkh1YkVycm9yIjUKEFJlZ2lzdGVyUmVzcG9uc2USEAoIYWNjZXB0ZWQYASABKAgSDwoHbWVzc2FnZRgCIAEoCSJnCg9SdW50aW1lUmVnaXN0ZXISDAoEbmFtZRgBIAEoCRIQCghob3N0bmFtZRgCIAEoCRIKCgJvcxgDIAEoCRIMCgRhcmNoGAQgASgJEhoKEnN1cHBvcnRlZF9ydW50aW1lcxgFIAMoCSI8ChdSdW50aW1lUmVnaXN0ZXJSZXNwb25zZRIQCghhY2NlcHRlZBgBIAEoCBIPCgdtZXNzYWdlGAIgASgJImoKDUludm9rZUNvbW1hbmQSEgoKcmVxdWVzdF9pZBgBIAEoCRIRCgljbGlwX25hbWUYAiABKAkSDwoHY29tbWFuZBgDIAEoCRINCgVpbnB1dBgEIAEoDBISCgpjbGlwX3Rva2VuGAUgASgJIj0KC0ludm9rZUlucHV0EhIKCnJlcXVlc3RfaWQYASABKAkSDAoEZGF0YRgCIAEoDBIMCgRkb25lGAMgASgIIlcKDkluc3RhbGxDb21tYW5kEhIKCnJlcXVlc3RfaWQYASABKAkSDgoGc291cmNlGAIgASgJEg0KBWFsaWFzGAMgASgJEhIKCmNsaXBfdG9rZW4YBCABKAkiaAoNSW5zdGFsbFJlc3VsdBISCgpyZXF1ZXN0X2lkGAEgASgJEiEKBWVycm9yGAIgASgLMhIucGluaXgudjIuSHViRXJyb3ISIAoEY2xpcBgDIAEoCzISLnBpbml4LnYyLkNsaXBJbmZvIjIKDVJlbW92ZUNvbW1hbmQSEgoKcmVxdWVzdF9pZBgBIAEoCRINCgVhbGlhcxgCIAEoCSJFCgxSZW1vdmVSZXN1bHQSEgoKcmVxdWVzdF9pZBgBIAEoCRIhCgVlcnJvchgCIAEoCzISLnBpbml4LnYyLkh1YkVycm9yIiQKCUhlYXJ0YmVhdBIXCg9zZW50X2F0X3VuaXhfbXMYASABKAMiEgoQTGlzdENsaXBzUmVxdWVzdCI2ChFMaXN0Q2xpcHNSZXNwb25zZRIhCgVjbGlwcxgBIAMoCzISLnBpbml4LnYyLkNsaXBJbmZvIhYKFExpc3RQcm92aWRlcnNSZXF1ZXN0IkIKFUxpc3RQcm92aWRlcnNSZXNwb25zZRIpCglwcm92aWRlcnMYASADKAsyFi5waW5peC52Mi5Qcm92aWRlckluZm8iJwoSR2V0TWFuaWZlc3RSZXF1ZXN0EhEKCWNsaXBfbmFtZRgBIAEoCSI/ChNHZXRNYW5pZmVzdFJlc3BvbnNlEigKCG1hbmlmZXN0GAEgASgLMhYucGluaXgudjIuQ2xpcE1hbmlmZXN0ImsKEUdldENsaXBXZWJSZXF1ZXN0EhEKCWNsaXBfbmFtZRgBIAEoCRIMCgRwYXRoGAIgASgJEhUKDWlmX25vbmVfbWF0Y2gYAyABKAkSDgoGb2Zmc2V0GAQgASgDEg4KBmxlbmd0aBgFIAEoAyJzChJHZXRDbGlwV2ViUmVzcG9uc2USDwoHY29udGVudBgBIAEoDBIUCgxjb250ZW50X3R5cGUYAiABKAkSDAoEZXRhZxgDIAEoCRIUCgxub3RfbW9kaWZpZWQYBCABKAgSEgoKdG90YWxfc2l6ZRgFIAEoAyJWCg1JbnZva2VSZXF1ZXN0EhEKCWNsaXBfbmFtZRgBIAEoCRIPCgdjb21tYW5kGAIgASgJEg0KBWlucHV0GAMgASgMEhIKCmNsaXBfdG9rZW4YBCABKAkiQwoOSW52b2tlUmVzcG9uc2USDgoGb3V0cHV0GAEgASgMEiEKBWVycm9yGAIgASgLMhIucGluaXgudjIuSHViRXJyb3IicQoTSW52b2tlU3RyZWFtTWVzc2FnZRIoCgVzdGFydBgBIAEoCzIXLnBpbml4LnYyLkludm9rZVJlcXVlc3RIABIlCgVjaHVuaxgCIAEoCzIULnBpbml4LnYyLklucHV0Q2h1bmtIAEIJCgdwYXlsb2FkIigKCklucHV0Q2h1bmsSDAoEZGF0YRgBIAEoDBIMCgRkb25lGAIgASgIIm0KDkFkZENsaXBSZXF1ZXN0Eg4KBnNvdXJjZRgBIAEoCRIMCgRuYW1lGAIgASgJEhAKCHByb3ZpZGVyGAMgASgJEhIKCmNsaXBfdG9rZW4YBCABKAkSFwoPcmVxdWVzdGVkX2FsaWFzGAUgASgJIjMKD0FkZENsaXBSZXNwb25zZRIgCgRjbGlwGAEgASgLMhIucGluaXgudjIuQ2xpcEluZm8iJgoRUmVtb3ZlQ2xpcFJlcXVlc3QSEQoJY2xpcF9uYW1lGAEgASgJIicKElJlbW92ZUNsaXBSZXNwb25zZRIRCgljbGlwX25hbWUYASABKAkqcwoKQ2xpcFN0YXR1cxIbChdDTElQX1NUQVRVU19VTlNQRUNJRklFRBAAEhcKE0NMSVBfU1RBVFVTX1JVTk5JTkcQARIYChRDTElQX1NUQVRVU19TTEVFUElORxACEhUKEUNMSVBfU1RBVFVTX0VSUk9SEAMy4QUKCkh1YlNlcnZpY2USRQoOUHJvdmlkZXJTdHJlYW0SGS5waW5peC52Mi5Qcm92aWRlck1lc3NhZ2UaFC5waW5peC52Mi5IdWJNZXNzYWdlKAEwARJKCg1SdW50aW1lU3RyZWFtEhgucGluaXgudjIuUnVudGltZU1lc3NhZ2UaGy5waW5peC52Mi5IdWJSdW50aW1lTWVzc2FnZSgBMAESRAoJTGlzdENsaXBzEhoucGluaXgudjIuTGlzdENsaXBzUmVxdWVzdBobLnBpbml4LnYyLkxpc3RDbGlwc1Jlc3BvbnNlElAKDUxpc3RQcm92aWRlcnMSHi5waW5peC52Mi5MaXN0UHJvdmlkZXJzUmVxdWVzdBofLnBpbml4LnYyLkxpc3RQcm92aWRlcnNSZXNwb25zZRJKCgtHZXRNYW5pZmVzdBIcLnBpbml4LnYyLkdldE1hbmlmZXN0UmVxdWVzdBodLnBpbml4LnYyLkdldE1hbmlmZXN0UmVzcG9uc2USRwoKR2V0Q2xpcFdlYhIbLnBpbml4LnYyLkdldENsaXBXZWJSZXF1ZXN0GhwucGluaXgudjIuR2V0Q2xpcFdlYlJlc3BvbnNlEj0KBkludm9rZRIXLnBpbml4LnYyLkludm9rZVJlcXVlc3QaGC5waW5peC52Mi5JbnZva2VSZXNwb25zZTABEksKDEludm9rZVN0cmVhbRIdLnBpbml4LnYyLkludm9rZVN0cmVhbU1lc3NhZ2UaGC5waW5peC52Mi5JbnZva2VSZXNwb25zZSgBMAESPgoHQWRkQ2xpcBIYLnBpbml4LnYyLkFkZENsaXBSZXF1ZXN0GhkucGluaXgudjIuQWRkQ2xpcFJlc3BvbnNlEkcKClJlbW92ZUNsaXASGy5waW5peC52Mi5SZW1vdmVDbGlwUmVxdWVzdBocLnBpbml4LnYyLlJlbW92ZUNsaXBSZXNwb25zZUIxWi9naXRodWIuY29tL2VwaXJhbC9waW5peC9nZW4vZ28vcGluaXgvdjI7cGluaXh2MmIGcHJvdG8z");
+  fileDesc("ChJwaW5peC92Mi9odWIucHJvdG8SCHBpbml4LnYyIikKCEh1YkVycm9yEgwKBGNvZGUYASABKAkSDwoHbWVzc2FnZRgCIAEoCSJPCgtDb21tYW5kSW5mbxIMCgRuYW1lGAEgASgJEhMKC2Rlc2NyaXB0aW9uGAIgASgJEg0KBWlucHV0GAMgASgJEg4KBm91dHB1dBgEIAEoCSKDAgoIQ2xpcEluZm8SDAoEbmFtZRgBIAEoCRIPCgdwYWNrYWdlGAIgASgJEg8KB3ZlcnNpb24YAyABKAkSEAoIcHJvdmlkZXIYBCABKAkSDgoGZG9tYWluGAUgASgJEicKCGNvbW1hbmRzGAYgAygLMhUucGluaXgudjIuQ29tbWFuZEluZm8SDwoHaGFzX3dlYhgHIAEoCBIXCg90b2tlbl9wcm90ZWN0ZWQYCCABKAgSFAoMZGVwZW5kZW5jaWVzGAkgAygJEiQKBnN0YXR1cxgKIAEoDjIULnBpbml4LnYyLkNsaXBTdGF0dXMSFgoOc3RhdHVzX21lc3NhZ2UYCyABKAkiMgoORGVwZW5kZW5jeVNsb3QSDwoHcGFja2FnZRgBIAEoCRIPCgd2ZXJzaW9uGAIgASgJIlAKC0NsaXBCaW5kaW5nEg0KBWFsaWFzGAEgASgJEgsKA2h1YhgCIAEoCRIRCglodWJfdG9rZW4YAyABKAkSEgoKY2xpcF90b2tlbhgEIAEoCSLHAwoMQ2xpcE1hbmlmZXN0EgwKBG5hbWUYASABKAkSDwoHcGFja2FnZRgCIAEoCRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRvbWFpbhgEIAEoCRITCgtkZXNjcmlwdGlvbhgFIAEoCRInCghjb21tYW5kcxgGIAMoCzIVLnBpbml4LnYyLkNvbW1hbmRJbmZvEhQKDGRlcGVuZGVuY2llcxgHIAMoCRIPCgdoYXNfd2ViGAggASgIEhAKCHBhdHRlcm5zGAkgAygJEjYKCGVudGl0aWVzGAogAygLMiQucGluaXgudjIuQ2xpcE1hbmlmZXN0LkVudGl0aWVzRW50cnkSRQoQZGVwZW5kZW5jeV9zbG90cxgLIAMoCzIrLnBpbml4LnYyLkNsaXBNYW5pZmVzdC5EZXBlbmRlbmN5U2xvdHNFbnRyeRovCg1FbnRpdGllc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEaUAoURGVwZW5kZW5jeVNsb3RzRW50cnkSCwoDa2V5GAEgASgJEicKBXZhbHVlGAIgASgLMhgucGluaXgudjIuRGVwZW5kZW5jeVNsb3Q6AjgBIlkKDFByb3ZpZGVySW5mbxIMCgRuYW1lGAEgASgJEhYKDmFjY2VwdHNfbWFuYWdlGAIgASgIEg0KBWNsaXBzGAMgAygJEhQKDGNvbm5lY3RlZF9hdBgEIAEoAyJYChFDbGlwU3RhdHVzQ2hhbmdlZBIMCgRuYW1lGAEgASgJEiQKBnN0YXR1cxgCIAEoDjIULnBpbml4LnYyLkNsaXBTdGF0dXMSDwoHbWVzc2FnZRgDIAEoCSLyAgoPUHJvdmlkZXJNZXNzYWdlEi0KCHJlZ2lzdGVyGAEgASgLMhkucGluaXgudjIuUmVnaXN0ZXJSZXF1ZXN0SAASKQoKY2xpcF9hZGRlZBgCIAEoCzITLnBpbml4LnYyLkNsaXBBZGRlZEgAEi0KDGNsaXBfcmVtb3ZlZBgDIAEoCzIVLnBpbml4LnYyLkNsaXBSZW1vdmVkSAASLwoNaW52b2tlX3Jlc3VsdBgEIAEoCzIWLnBpbml4LnYyLkludm9rZVJlc3VsdEgAEiMKBHBpbmcYBSABKAsyEy5waW5peC52Mi5IZWFydGJlYXRIABI5ChNnZXRfY2xpcF93ZWJfcmVzdWx0GAcgASgLMhoucGluaXgudjIuR2V0Q2xpcFdlYlJlc3VsdEgAEjoKE2NsaXBfc3RhdHVzX2NoYW5nZWQYCCABKAsyGy5waW5peC52Mi5DbGlwU3RhdHVzQ2hhbmdlZEgAQgkKB3BheWxvYWQilAIKCkh1Yk1lc3NhZ2USNwoRcmVnaXN0ZXJfcmVzcG9uc2UYASABKAsyGi5waW5peC52Mi5SZWdpc3RlclJlc3BvbnNlSAASMQoOaW52b2tlX2NvbW1hbmQYAiABKAsyFy5waW5peC52Mi5JbnZva2VDb21tYW5kSAASLQoMaW52b2tlX2lucHV0GAMgASgLMhUucGluaXgudjIuSW52b2tlSW5wdXRIABIjCgRwb25nGAUgASgLMhMucGluaXgudjIuSGVhcnRiZWF0SAASOwoUZ2V0X2NsaXBfd2ViX2NvbW1hbmQYBiABKAsyGy5waW5peC52Mi5HZXRDbGlwV2ViQ29tbWFuZEgAQgkKB3BheWxvYWQi0wEKDlJ1bnRpbWVNZXNzYWdlEi0KCHJlZ2lzdGVyGAEgASgLMhkucGluaXgudjIuUnVudGltZVJlZ2lzdGVySAASMQoOaW5zdGFsbF9yZXN1bHQYAiABKAsyFy5waW5peC52Mi5JbnN0YWxsUmVzdWx0SAASLwoNcmVtb3ZlX3Jlc3VsdBgDIAEoCzIWLnBpbml4LnYyLlJlbW92ZVJlc3VsdEgAEiMKBHBpbmcYBCABKAsyEy5waW5peC52Mi5IZWFydGJlYXRIAEIJCgdwYXlsb2FkIusBChFIdWJSdW50aW1lTWVzc2FnZRI+ChFyZWdpc3Rlcl9yZXNwb25zZRgBIAEoCzIhLnBpbml4LnYyLlJ1bnRpbWVSZWdpc3RlclJlc3BvbnNlSAASMwoPaW5zdGFsbF9jb21tYW5kGAIgASgLMhgucGluaXgudjIuSW5zdGFsbENvbW1hbmRIABIxCg5yZW1vdmVfY29tbWFuZBgDIAEoCzIXLnBpbml4LnYyLlJlbW92ZUNvbW1hbmRIABIjCgRwb25nGAQgASgLMhMucGluaXgudjIuSGVhcnRiZWF0SABCCQoHcGF5bG9hZCJTCg9SZWdpc3RlclJlcXVlc3QSFQoNcHJvdmlkZXJfbmFtZRgBIAEoCRIpCgVjbGlwcxgDIAMoCzIaLnBpbml4LnYyLkNsaXBSZWdpc3RyYXRpb24izQIKEENsaXBSZWdpc3RyYXRpb24SDQoFYWxpYXMYASABKAkSDwoHcGFja2FnZRgCIAEoCRIPCgd2ZXJzaW9uGAMgASgJEg4KBmRvbWFpbhgEIAEoCRInCghjb21tYW5kcxgFIAMoCzIVLnBpbml4LnYyLkNvbW1hbmRJbmZvEg8KB2hhc193ZWIYBiABKAgSFAoMZGVwZW5kZW5jaWVzGAcgAygJEhcKD3Rva2VuX3Byb3RlY3RlZBgIIAEoCBIQCgRuYW1lGAkgASgJQgIYARIQCghwYXR0ZXJucxgKIAMoCRI6CghlbnRpdGllcxgLIAMoCzIoLnBpbml4LnYyLkNsaXBSZWdpc3RyYXRpb24uRW50aXRpZXNFbnRyeRovCg1FbnRpdGllc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiSQoJQ2xpcEFkZGVkEigKBGNsaXAYASABKAsyGi5waW5peC52Mi5DbGlwUmVnaXN0cmF0aW9uEhIKCnJlcXVlc3RfaWQYAiABKAkiLwoLQ2xpcFJlbW92ZWQSDAoEbmFtZRgBIAEoCRISCgpyZXF1ZXN0X2lkGAIgASgJImMKDEludm9rZVJlc3VsdBISCgpyZXF1ZXN0X2lkGAEgASgJEg4KBm91dHB1dBgCIAEoDBIhCgVlcnJvchgDIAEoCzISLnBpbml4LnYyLkh1YkVycm9yEgwKBGRvbmUYBCABKAgifwoRR2V0Q2xpcFdlYkNvbW1hbmQSEgoKcmVxdWVzdF9pZBgBIAEoCRIRCgljbGlwX25hbWUYAiABKAkSDAoEcGF0aBgDIAEoCRIOCgZvZmZzZXQYBCABKAMSDgoGbGVuZ3RoGAUgASgDEhUKDWlmX25vbmVfbWF0Y2gYBiABKAkiqAEKEEdldENsaXBXZWJSZXN1bHQSEgoKcmVxdWVzdF9pZBgBIAEoCRIPCgdjb250ZW50GAIgASgMEhQKDGNvbnRlbnRfdHlwZRgDIAEoCRIMCgRldGFnGAQgASgJEhIKCnRvdGFsX3NpemUYBSABKAMSFAoMbm90X21vZGlmaWVkGAYgASgIEiEKBWVycm9yGAcgASgLMhIucGluaXgudjIuSHViRXJyb3IiNQoQUmVnaXN0ZXJSZXNwb25zZRIQCghhY2NlcHRlZBgBIAEoCBIPCgdtZXNzYWdlGAIgASgJImcKD1J1bnRpbWVSZWdpc3RlchIMCgRuYW1lGAEgASgJEhAKCGhvc3RuYW1lGAIgASgJEgoKAm9zGAMgASgJEgwKBGFyY2gYBCABKAkSGgoSc3VwcG9ydGVkX3J1bnRpbWVzGAUgAygJIjwKF1J1bnRpbWVSZWdpc3RlclJlc3BvbnNlEhAKCGFjY2VwdGVkGAEgASgIEg8KB21lc3NhZ2UYAiABKAkiagoNSW52b2tlQ29tbWFuZBISCgpyZXF1ZXN0X2lkGAEgASgJEhEKCWNsaXBfbmFtZRgCIAEoCRIPCgdjb21tYW5kGAMgASgJEg0KBWlucHV0GAQgASgMEhIKCmNsaXBfdG9rZW4YBSABKAkiPQoLSW52b2tlSW5wdXQSEgoKcmVxdWVzdF9pZBgBIAEoCRIMCgRkYXRhGAIgASgMEgwKBGRvbmUYAyABKAgiVwoOSW5zdGFsbENvbW1hbmQSEgoKcmVxdWVzdF9pZBgBIAEoCRIOCgZzb3VyY2UYAiABKAkSDQoFYWxpYXMYAyABKAkSEgoKY2xpcF90b2tlbhgEIAEoCSJoCg1JbnN0YWxsUmVzdWx0EhIKCnJlcXVlc3RfaWQYASABKAkSIQoFZXJyb3IYAiABKAsyEi5waW5peC52Mi5IdWJFcnJvchIgCgRjbGlwGAMgASgLMhIucGluaXgudjIuQ2xpcEluZm8iMgoNUmVtb3ZlQ29tbWFuZBISCgpyZXF1ZXN0X2lkGAEgASgJEg0KBWFsaWFzGAIgASgJIkUKDFJlbW92ZVJlc3VsdBISCgpyZXF1ZXN0X2lkGAEgASgJEiEKBWVycm9yGAIgASgLMhIucGluaXgudjIuSHViRXJyb3IiJAoJSGVhcnRiZWF0EhcKD3NlbnRfYXRfdW5peF9tcxgBIAEoAyISChBMaXN0Q2xpcHNSZXF1ZXN0IjYKEUxpc3RDbGlwc1Jlc3BvbnNlEiEKBWNsaXBzGAEgAygLMhIucGluaXgudjIuQ2xpcEluZm8iFgoUTGlzdFByb3ZpZGVyc1JlcXVlc3QiQgoVTGlzdFByb3ZpZGVyc1Jlc3BvbnNlEikKCXByb3ZpZGVycxgBIAMoCzIWLnBpbml4LnYyLlByb3ZpZGVySW5mbyInChJHZXRNYW5pZmVzdFJlcXVlc3QSEQoJY2xpcF9uYW1lGAEgASgJIj8KE0dldE1hbmlmZXN0UmVzcG9uc2USKAoIbWFuaWZlc3QYASABKAsyFi5waW5peC52Mi5DbGlwTWFuaWZlc3QiawoRR2V0Q2xpcFdlYlJlcXVlc3QSEQoJY2xpcF9uYW1lGAEgASgJEgwKBHBhdGgYAiABKAkSFQoNaWZfbm9uZV9tYXRjaBgDIAEoCRIOCgZvZmZzZXQYBCABKAMSDgoGbGVuZ3RoGAUgASgDInMKEkdldENsaXBXZWJSZXNwb25zZRIPCgdjb250ZW50GAEgASgMEhQKDGNvbnRlbnRfdHlwZRgCIAEoCRIMCgRldGFnGAMgASgJEhQKDG5vdF9tb2RpZmllZBgEIAEoCBISCgp0b3RhbF9zaXplGAUgASgDIlYKDUludm9rZVJlcXVlc3QSEQoJY2xpcF9uYW1lGAEgASgJEg8KB2NvbW1hbmQYAiABKAkSDQoFaW5wdXQYAyABKAwSEgoKY2xpcF90b2tlbhgEIAEoCSJDCg5JbnZva2VSZXNwb25zZRIOCgZvdXRwdXQYASABKAwSIQoFZXJyb3IYAiABKAsyEi5waW5peC52Mi5IdWJFcnJvciJxChNJbnZva2VTdHJlYW1NZXNzYWdlEigKBXN0YXJ0GAEgASgLMhcucGluaXgudjIuSW52b2tlUmVxdWVzdEgAEiUKBWNodW5rGAIgASgLMhQucGluaXgudjIuSW5wdXRDaHVua0gAQgkKB3BheWxvYWQiKAoKSW5wdXRDaHVuaxIMCgRkYXRhGAEgASgMEgwKBGRvbmUYAiABKAgibQoOQWRkQ2xpcFJlcXVlc3QSDgoGc291cmNlGAEgASgJEgwKBG5hbWUYAiABKAkSEAoIcHJvdmlkZXIYAyABKAkSEgoKY2xpcF90b2tlbhgEIAEoCRIXCg9yZXF1ZXN0ZWRfYWxpYXMYBSABKAkiMwoPQWRkQ2xpcFJlc3BvbnNlEiAKBGNsaXAYASABKAsyEi5waW5peC52Mi5DbGlwSW5mbyI1ChFSZW1vdmVDbGlwUmVxdWVzdBIRCgljbGlwX25hbWUYASABKAkSDQoFcHVyZ2UYAiABKAgiJwoSUmVtb3ZlQ2xpcFJlc3BvbnNlEhEKCWNsaXBfbmFtZRgBIAEoCSInChJHZXRCaW5kaW5nc1JlcXVlc3QSEQoJY2xpcF9uYW1lGAEgASgJIrwCChNHZXRCaW5kaW5nc1Jlc3BvbnNlEj0KCGJpbmRpbmdzGAEgAygLMisucGluaXgudjIuR2V0QmluZGluZ3NSZXNwb25zZS5CaW5kaW5nc0VudHJ5EkwKEGRlcGVuZGVuY3lfc2xvdHMYAiADKAsyMi5waW5peC52Mi5HZXRCaW5kaW5nc1Jlc3BvbnNlLkRlcGVuZGVuY3lTbG90c0VudHJ5GkYKDUJpbmRpbmdzRW50cnkSCwoDa2V5GAEgASgJEiQKBXZhbHVlGAIgASgLMhUucGluaXgudjIuQ2xpcEJpbmRpbmc6AjgBGlAKFERlcGVuZGVuY3lTbG90c0VudHJ5EgsKA2tleRgBIAEoCRInCgV2YWx1ZRgCIAEoCzIYLnBpbml4LnYyLkRlcGVuZGVuY3lTbG90OgI4ASJcChFTZXRCaW5kaW5nUmVxdWVzdBIRCgljbGlwX25hbWUYASABKAkSDAoEc2xvdBgCIAEoCRImCgdiaW5kaW5nGAMgASgLMhUucGluaXgudjIuQ2xpcEJpbmRpbmciFAoSU2V0QmluZGluZ1Jlc3BvbnNlIjcKFFJlbW92ZUJpbmRpbmdSZXF1ZXN0EhEKCWNsaXBfbmFtZRgBIAEoCRIMCgRzbG90GAIgASgJIhcKFVJlbW92ZUJpbmRpbmdSZXNwb25zZSpzCgpDbGlwU3RhdHVzEhsKF0NMSVBfU1RBVFVTX1VOU1BFQ0lGSUVEEAASFwoTQ0xJUF9TVEFUVVNfUlVOTklORxABEhgKFENMSVBfU1RBVFVTX1NMRUVQSU5HEAISFQoRQ0xJUF9TVEFUVVNfRVJST1IQAzLIBwoKSHViU2VydmljZRJFCg5Qcm92aWRlclN0cmVhbRIZLnBpbml4LnYyLlByb3ZpZGVyTWVzc2FnZRoULnBpbml4LnYyLkh1Yk1lc3NhZ2UoATABEkoKDVJ1bnRpbWVTdHJlYW0SGC5waW5peC52Mi5SdW50aW1lTWVzc2FnZRobLnBpbml4LnYyLkh1YlJ1bnRpbWVNZXNzYWdlKAEwARJECglMaXN0Q2xpcHMSGi5waW5peC52Mi5MaXN0Q2xpcHNSZXF1ZXN0GhsucGluaXgudjIuTGlzdENsaXBzUmVzcG9uc2USUAoNTGlzdFByb3ZpZGVycxIeLnBpbml4LnYyLkxpc3RQcm92aWRlcnNSZXF1ZXN0Gh8ucGluaXgudjIuTGlzdFByb3ZpZGVyc1Jlc3BvbnNlEkoKC0dldE1hbmlmZXN0EhwucGluaXgudjIuR2V0TWFuaWZlc3RSZXF1ZXN0Gh0ucGluaXgudjIuR2V0TWFuaWZlc3RSZXNwb25zZRJHCgpHZXRDbGlwV2ViEhsucGluaXgudjIuR2V0Q2xpcFdlYlJlcXVlc3QaHC5waW5peC52Mi5HZXRDbGlwV2ViUmVzcG9uc2USPQoGSW52b2tlEhcucGluaXgudjIuSW52b2tlUmVxdWVzdBoYLnBpbml4LnYyLkludm9rZVJlc3BvbnNlMAESSwoMSW52b2tlU3RyZWFtEh0ucGluaXgudjIuSW52b2tlU3RyZWFtTWVzc2FnZRoYLnBpbml4LnYyLkludm9rZVJlc3BvbnNlKAEwARI+CgdBZGRDbGlwEhgucGluaXgudjIuQWRkQ2xpcFJlcXVlc3QaGS5waW5peC52Mi5BZGRDbGlwUmVzcG9uc2USRwoKUmVtb3ZlQ2xpcBIbLnBpbml4LnYyLlJlbW92ZUNsaXBSZXF1ZXN0GhwucGluaXgudjIuUmVtb3ZlQ2xpcFJlc3BvbnNlEkoKC0dldEJpbmRpbmdzEhwucGluaXgudjIuR2V0QmluZGluZ3NSZXF1ZXN0Gh0ucGluaXgudjIuR2V0QmluZGluZ3NSZXNwb25zZRJHCgpTZXRCaW5kaW5nEhsucGluaXgudjIuU2V0QmluZGluZ1JlcXVlc3QaHC5waW5peC52Mi5TZXRCaW5kaW5nUmVzcG9uc2USUAoNUmVtb3ZlQmluZGluZxIeLnBpbml4LnYyLlJlbW92ZUJpbmRpbmdSZXF1ZXN0Gh8ucGluaXgudjIuUmVtb3ZlQmluZGluZ1Jlc3BvbnNlQjFaL2dpdGh1Yi5jb20vZXBpcmFsL3Bpbml4L2dlbi9nby9waW5peC92MjtwaW5peHYyYgZwcm90bzM");
 
 /**
  * @generated from message pinix.v2.HubError
@@ -134,6 +134,60 @@ export const ClipInfoSchema: GenMessage<ClipInfo> = /*@__PURE__*/
   messageDesc(file_pinix_v2_hub, 2);
 
 /**
+ * @generated from message pinix.v2.DependencySlot
+ */
+export type DependencySlot = Message<"pinix.v2.DependencySlot"> & {
+  /**
+   * @generated from field: string package = 1;
+   */
+  package: string;
+
+  /**
+   * @generated from field: string version = 2;
+   */
+  version: string;
+};
+
+/**
+ * Describes the message pinix.v2.DependencySlot.
+ * Use `create(DependencySlotSchema)` to create a new message.
+ */
+export const DependencySlotSchema: GenMessage<DependencySlot> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 3);
+
+/**
+ * @generated from message pinix.v2.ClipBinding
+ */
+export type ClipBinding = Message<"pinix.v2.ClipBinding"> & {
+  /**
+   * @generated from field: string alias = 1;
+   */
+  alias: string;
+
+  /**
+   * @generated from field: string hub = 2;
+   */
+  hub: string;
+
+  /**
+   * @generated from field: string hub_token = 3;
+   */
+  hubToken: string;
+
+  /**
+   * @generated from field: string clip_token = 4;
+   */
+  clipToken: string;
+};
+
+/**
+ * Describes the message pinix.v2.ClipBinding.
+ * Use `create(ClipBindingSchema)` to create a new message.
+ */
+export const ClipBindingSchema: GenMessage<ClipBinding> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 4);
+
+/**
  * @generated from message pinix.v2.ClipManifest
  */
 export type ClipManifest = Message<"pinix.v2.ClipManifest"> & {
@@ -186,6 +240,11 @@ export type ClipManifest = Message<"pinix.v2.ClipManifest"> & {
    * @generated from field: map<string, string> entities = 10;
    */
   entities: { [key: string]: string };
+
+  /**
+   * @generated from field: map<string, pinix.v2.DependencySlot> dependency_slots = 11;
+   */
+  dependencySlots: { [key: string]: DependencySlot };
 };
 
 /**
@@ -193,7 +252,7 @@ export type ClipManifest = Message<"pinix.v2.ClipManifest"> & {
  * Use `create(ClipManifestSchema)` to create a new message.
  */
 export const ClipManifestSchema: GenMessage<ClipManifest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 3);
+  messageDesc(file_pinix_v2_hub, 5);
 
 /**
  * 当前连入的 Provider（在列表里 = 在线）。
@@ -227,7 +286,7 @@ export type ProviderInfo = Message<"pinix.v2.ProviderInfo"> & {
  * Use `create(ProviderInfoSchema)` to create a new message.
  */
 export const ProviderInfoSchema: GenMessage<ProviderInfo> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 4);
+  messageDesc(file_pinix_v2_hub, 6);
 
 /**
  * @generated from message pinix.v2.ClipStatusChanged
@@ -254,7 +313,7 @@ export type ClipStatusChanged = Message<"pinix.v2.ClipStatusChanged"> & {
  * Use `create(ClipStatusChangedSchema)` to create a new message.
  */
 export const ClipStatusChangedSchema: GenMessage<ClipStatusChanged> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 5);
+  messageDesc(file_pinix_v2_hub, 7);
 
 /**
  * @generated from message pinix.v2.ProviderMessage
@@ -313,7 +372,7 @@ export type ProviderMessage = Message<"pinix.v2.ProviderMessage"> & {
  * Use `create(ProviderMessageSchema)` to create a new message.
  */
 export const ProviderMessageSchema: GenMessage<ProviderMessage> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 6);
+  messageDesc(file_pinix_v2_hub, 8);
 
 /**
  * @generated from message pinix.v2.HubMessage
@@ -360,7 +419,7 @@ export type HubMessage = Message<"pinix.v2.HubMessage"> & {
  * Use `create(HubMessageSchema)` to create a new message.
  */
 export const HubMessageSchema: GenMessage<HubMessage> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 7);
+  messageDesc(file_pinix_v2_hub, 9);
 
 /**
  * @generated from message pinix.v2.RuntimeMessage
@@ -401,7 +460,7 @@ export type RuntimeMessage = Message<"pinix.v2.RuntimeMessage"> & {
  * Use `create(RuntimeMessageSchema)` to create a new message.
  */
 export const RuntimeMessageSchema: GenMessage<RuntimeMessage> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 8);
+  messageDesc(file_pinix_v2_hub, 10);
 
 /**
  * @generated from message pinix.v2.HubRuntimeMessage
@@ -442,7 +501,7 @@ export type HubRuntimeMessage = Message<"pinix.v2.HubRuntimeMessage"> & {
  * Use `create(HubRuntimeMessageSchema)` to create a new message.
  */
 export const HubRuntimeMessageSchema: GenMessage<HubRuntimeMessage> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 9);
+  messageDesc(file_pinix_v2_hub, 11);
 
 /**
  * @generated from message pinix.v2.RegisterRequest
@@ -464,7 +523,7 @@ export type RegisterRequest = Message<"pinix.v2.RegisterRequest"> & {
  * Use `create(RegisterRequestSchema)` to create a new message.
  */
 export const RegisterRequestSchema: GenMessage<RegisterRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 10);
+  messageDesc(file_pinix_v2_hub, 12);
 
 /**
  * @generated from message pinix.v2.ClipRegistration
@@ -532,7 +591,7 @@ export type ClipRegistration = Message<"pinix.v2.ClipRegistration"> & {
  * Use `create(ClipRegistrationSchema)` to create a new message.
  */
 export const ClipRegistrationSchema: GenMessage<ClipRegistration> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 11);
+  messageDesc(file_pinix_v2_hub, 13);
 
 /**
  * @generated from message pinix.v2.ClipAdded
@@ -554,7 +613,7 @@ export type ClipAdded = Message<"pinix.v2.ClipAdded"> & {
  * Use `create(ClipAddedSchema)` to create a new message.
  */
 export const ClipAddedSchema: GenMessage<ClipAdded> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 12);
+  messageDesc(file_pinix_v2_hub, 14);
 
 /**
  * @generated from message pinix.v2.ClipRemoved
@@ -576,7 +635,7 @@ export type ClipRemoved = Message<"pinix.v2.ClipRemoved"> & {
  * Use `create(ClipRemovedSchema)` to create a new message.
  */
 export const ClipRemovedSchema: GenMessage<ClipRemoved> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 13);
+  messageDesc(file_pinix_v2_hub, 15);
 
 /**
  * @generated from message pinix.v2.InvokeResult
@@ -608,7 +667,7 @@ export type InvokeResult = Message<"pinix.v2.InvokeResult"> & {
  * Use `create(InvokeResultSchema)` to create a new message.
  */
 export const InvokeResultSchema: GenMessage<InvokeResult> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 14);
+  messageDesc(file_pinix_v2_hub, 16);
 
 /**
  * @generated from message pinix.v2.GetClipWebCommand
@@ -650,7 +709,7 @@ export type GetClipWebCommand = Message<"pinix.v2.GetClipWebCommand"> & {
  * Use `create(GetClipWebCommandSchema)` to create a new message.
  */
 export const GetClipWebCommandSchema: GenMessage<GetClipWebCommand> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 15);
+  messageDesc(file_pinix_v2_hub, 17);
 
 /**
  * @generated from message pinix.v2.GetClipWebResult
@@ -697,7 +756,7 @@ export type GetClipWebResult = Message<"pinix.v2.GetClipWebResult"> & {
  * Use `create(GetClipWebResultSchema)` to create a new message.
  */
 export const GetClipWebResultSchema: GenMessage<GetClipWebResult> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 16);
+  messageDesc(file_pinix_v2_hub, 18);
 
 /**
  * @generated from message pinix.v2.RegisterResponse
@@ -719,7 +778,7 @@ export type RegisterResponse = Message<"pinix.v2.RegisterResponse"> & {
  * Use `create(RegisterResponseSchema)` to create a new message.
  */
 export const RegisterResponseSchema: GenMessage<RegisterResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 17);
+  messageDesc(file_pinix_v2_hub, 19);
 
 /**
  * @generated from message pinix.v2.RuntimeRegister
@@ -756,7 +815,7 @@ export type RuntimeRegister = Message<"pinix.v2.RuntimeRegister"> & {
  * Use `create(RuntimeRegisterSchema)` to create a new message.
  */
 export const RuntimeRegisterSchema: GenMessage<RuntimeRegister> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 18);
+  messageDesc(file_pinix_v2_hub, 20);
 
 /**
  * @generated from message pinix.v2.RuntimeRegisterResponse
@@ -778,7 +837,7 @@ export type RuntimeRegisterResponse = Message<"pinix.v2.RuntimeRegisterResponse"
  * Use `create(RuntimeRegisterResponseSchema)` to create a new message.
  */
 export const RuntimeRegisterResponseSchema: GenMessage<RuntimeRegisterResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 19);
+  messageDesc(file_pinix_v2_hub, 21);
 
 /**
  * @generated from message pinix.v2.InvokeCommand
@@ -815,7 +874,7 @@ export type InvokeCommand = Message<"pinix.v2.InvokeCommand"> & {
  * Use `create(InvokeCommandSchema)` to create a new message.
  */
 export const InvokeCommandSchema: GenMessage<InvokeCommand> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 20);
+  messageDesc(file_pinix_v2_hub, 22);
 
 /**
  * @generated from message pinix.v2.InvokeInput
@@ -842,7 +901,7 @@ export type InvokeInput = Message<"pinix.v2.InvokeInput"> & {
  * Use `create(InvokeInputSchema)` to create a new message.
  */
 export const InvokeInputSchema: GenMessage<InvokeInput> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 21);
+  messageDesc(file_pinix_v2_hub, 23);
 
 /**
  * @generated from message pinix.v2.InstallCommand
@@ -874,7 +933,7 @@ export type InstallCommand = Message<"pinix.v2.InstallCommand"> & {
  * Use `create(InstallCommandSchema)` to create a new message.
  */
 export const InstallCommandSchema: GenMessage<InstallCommand> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 22);
+  messageDesc(file_pinix_v2_hub, 24);
 
 /**
  * @generated from message pinix.v2.InstallResult
@@ -901,7 +960,7 @@ export type InstallResult = Message<"pinix.v2.InstallResult"> & {
  * Use `create(InstallResultSchema)` to create a new message.
  */
 export const InstallResultSchema: GenMessage<InstallResult> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 23);
+  messageDesc(file_pinix_v2_hub, 25);
 
 /**
  * @generated from message pinix.v2.RemoveCommand
@@ -923,7 +982,7 @@ export type RemoveCommand = Message<"pinix.v2.RemoveCommand"> & {
  * Use `create(RemoveCommandSchema)` to create a new message.
  */
 export const RemoveCommandSchema: GenMessage<RemoveCommand> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 24);
+  messageDesc(file_pinix_v2_hub, 26);
 
 /**
  * @generated from message pinix.v2.RemoveResult
@@ -945,7 +1004,7 @@ export type RemoveResult = Message<"pinix.v2.RemoveResult"> & {
  * Use `create(RemoveResultSchema)` to create a new message.
  */
 export const RemoveResultSchema: GenMessage<RemoveResult> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 25);
+  messageDesc(file_pinix_v2_hub, 27);
 
 /**
  * @generated from message pinix.v2.Heartbeat
@@ -962,7 +1021,7 @@ export type Heartbeat = Message<"pinix.v2.Heartbeat"> & {
  * Use `create(HeartbeatSchema)` to create a new message.
  */
 export const HeartbeatSchema: GenMessage<Heartbeat> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 26);
+  messageDesc(file_pinix_v2_hub, 28);
 
 /**
  * @generated from message pinix.v2.ListClipsRequest
@@ -975,7 +1034,7 @@ export type ListClipsRequest = Message<"pinix.v2.ListClipsRequest"> & {
  * Use `create(ListClipsRequestSchema)` to create a new message.
  */
 export const ListClipsRequestSchema: GenMessage<ListClipsRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 27);
+  messageDesc(file_pinix_v2_hub, 29);
 
 /**
  * @generated from message pinix.v2.ListClipsResponse
@@ -992,7 +1051,7 @@ export type ListClipsResponse = Message<"pinix.v2.ListClipsResponse"> & {
  * Use `create(ListClipsResponseSchema)` to create a new message.
  */
 export const ListClipsResponseSchema: GenMessage<ListClipsResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 28);
+  messageDesc(file_pinix_v2_hub, 30);
 
 /**
  * @generated from message pinix.v2.ListProvidersRequest
@@ -1005,7 +1064,7 @@ export type ListProvidersRequest = Message<"pinix.v2.ListProvidersRequest"> & {
  * Use `create(ListProvidersRequestSchema)` to create a new message.
  */
 export const ListProvidersRequestSchema: GenMessage<ListProvidersRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 29);
+  messageDesc(file_pinix_v2_hub, 31);
 
 /**
  * @generated from message pinix.v2.ListProvidersResponse
@@ -1022,7 +1081,7 @@ export type ListProvidersResponse = Message<"pinix.v2.ListProvidersResponse"> & 
  * Use `create(ListProvidersResponseSchema)` to create a new message.
  */
 export const ListProvidersResponseSchema: GenMessage<ListProvidersResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 30);
+  messageDesc(file_pinix_v2_hub, 32);
 
 /**
  * @generated from message pinix.v2.GetManifestRequest
@@ -1039,7 +1098,7 @@ export type GetManifestRequest = Message<"pinix.v2.GetManifestRequest"> & {
  * Use `create(GetManifestRequestSchema)` to create a new message.
  */
 export const GetManifestRequestSchema: GenMessage<GetManifestRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 31);
+  messageDesc(file_pinix_v2_hub, 33);
 
 /**
  * @generated from message pinix.v2.GetManifestResponse
@@ -1056,7 +1115,7 @@ export type GetManifestResponse = Message<"pinix.v2.GetManifestResponse"> & {
  * Use `create(GetManifestResponseSchema)` to create a new message.
  */
 export const GetManifestResponseSchema: GenMessage<GetManifestResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 32);
+  messageDesc(file_pinix_v2_hub, 34);
 
 /**
  * @generated from message pinix.v2.GetClipWebRequest
@@ -1093,7 +1152,7 @@ export type GetClipWebRequest = Message<"pinix.v2.GetClipWebRequest"> & {
  * Use `create(GetClipWebRequestSchema)` to create a new message.
  */
 export const GetClipWebRequestSchema: GenMessage<GetClipWebRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 33);
+  messageDesc(file_pinix_v2_hub, 35);
 
 /**
  * @generated from message pinix.v2.GetClipWebResponse
@@ -1130,7 +1189,7 @@ export type GetClipWebResponse = Message<"pinix.v2.GetClipWebResponse"> & {
  * Use `create(GetClipWebResponseSchema)` to create a new message.
  */
 export const GetClipWebResponseSchema: GenMessage<GetClipWebResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 34);
+  messageDesc(file_pinix_v2_hub, 36);
 
 /**
  * @generated from message pinix.v2.InvokeRequest
@@ -1162,7 +1221,7 @@ export type InvokeRequest = Message<"pinix.v2.InvokeRequest"> & {
  * Use `create(InvokeRequestSchema)` to create a new message.
  */
 export const InvokeRequestSchema: GenMessage<InvokeRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 35);
+  messageDesc(file_pinix_v2_hub, 37);
 
 /**
  * @generated from message pinix.v2.InvokeResponse
@@ -1184,7 +1243,7 @@ export type InvokeResponse = Message<"pinix.v2.InvokeResponse"> & {
  * Use `create(InvokeResponseSchema)` to create a new message.
  */
 export const InvokeResponseSchema: GenMessage<InvokeResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 36);
+  messageDesc(file_pinix_v2_hub, 38);
 
 /**
  * @generated from message pinix.v2.InvokeStreamMessage
@@ -1213,7 +1272,7 @@ export type InvokeStreamMessage = Message<"pinix.v2.InvokeStreamMessage"> & {
  * Use `create(InvokeStreamMessageSchema)` to create a new message.
  */
 export const InvokeStreamMessageSchema: GenMessage<InvokeStreamMessage> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 37);
+  messageDesc(file_pinix_v2_hub, 39);
 
 /**
  * @generated from message pinix.v2.InputChunk
@@ -1235,7 +1294,7 @@ export type InputChunk = Message<"pinix.v2.InputChunk"> & {
  * Use `create(InputChunkSchema)` to create a new message.
  */
 export const InputChunkSchema: GenMessage<InputChunk> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 38);
+  messageDesc(file_pinix_v2_hub, 40);
 
 /**
  * @generated from message pinix.v2.AddClipRequest
@@ -1272,7 +1331,7 @@ export type AddClipRequest = Message<"pinix.v2.AddClipRequest"> & {
  * Use `create(AddClipRequestSchema)` to create a new message.
  */
 export const AddClipRequestSchema: GenMessage<AddClipRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 39);
+  messageDesc(file_pinix_v2_hub, 41);
 
 /**
  * @generated from message pinix.v2.AddClipResponse
@@ -1289,7 +1348,7 @@ export type AddClipResponse = Message<"pinix.v2.AddClipResponse"> & {
  * Use `create(AddClipResponseSchema)` to create a new message.
  */
 export const AddClipResponseSchema: GenMessage<AddClipResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 40);
+  messageDesc(file_pinix_v2_hub, 42);
 
 /**
  * @generated from message pinix.v2.RemoveClipRequest
@@ -1299,6 +1358,11 @@ export type RemoveClipRequest = Message<"pinix.v2.RemoveClipRequest"> & {
    * @generated from field: string clip_name = 1;
    */
   clipName: string;
+
+  /**
+   * @generated from field: bool purge = 2;
+   */
+  purge: boolean;
 };
 
 /**
@@ -1306,7 +1370,7 @@ export type RemoveClipRequest = Message<"pinix.v2.RemoveClipRequest"> & {
  * Use `create(RemoveClipRequestSchema)` to create a new message.
  */
 export const RemoveClipRequestSchema: GenMessage<RemoveClipRequest> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 41);
+  messageDesc(file_pinix_v2_hub, 43);
 
 /**
  * @generated from message pinix.v2.RemoveClipResponse
@@ -1323,7 +1387,121 @@ export type RemoveClipResponse = Message<"pinix.v2.RemoveClipResponse"> & {
  * Use `create(RemoveClipResponseSchema)` to create a new message.
  */
 export const RemoveClipResponseSchema: GenMessage<RemoveClipResponse> = /*@__PURE__*/
-  messageDesc(file_pinix_v2_hub, 42);
+  messageDesc(file_pinix_v2_hub, 44);
+
+/**
+ * @generated from message pinix.v2.GetBindingsRequest
+ */
+export type GetBindingsRequest = Message<"pinix.v2.GetBindingsRequest"> & {
+  /**
+   * @generated from field: string clip_name = 1;
+   */
+  clipName: string;
+};
+
+/**
+ * Describes the message pinix.v2.GetBindingsRequest.
+ * Use `create(GetBindingsRequestSchema)` to create a new message.
+ */
+export const GetBindingsRequestSchema: GenMessage<GetBindingsRequest> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 45);
+
+/**
+ * @generated from message pinix.v2.GetBindingsResponse
+ */
+export type GetBindingsResponse = Message<"pinix.v2.GetBindingsResponse"> & {
+  /**
+   * @generated from field: map<string, pinix.v2.ClipBinding> bindings = 1;
+   */
+  bindings: { [key: string]: ClipBinding };
+
+  /**
+   * @generated from field: map<string, pinix.v2.DependencySlot> dependency_slots = 2;
+   */
+  dependencySlots: { [key: string]: DependencySlot };
+};
+
+/**
+ * Describes the message pinix.v2.GetBindingsResponse.
+ * Use `create(GetBindingsResponseSchema)` to create a new message.
+ */
+export const GetBindingsResponseSchema: GenMessage<GetBindingsResponse> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 46);
+
+/**
+ * @generated from message pinix.v2.SetBindingRequest
+ */
+export type SetBindingRequest = Message<"pinix.v2.SetBindingRequest"> & {
+  /**
+   * @generated from field: string clip_name = 1;
+   */
+  clipName: string;
+
+  /**
+   * @generated from field: string slot = 2;
+   */
+  slot: string;
+
+  /**
+   * @generated from field: pinix.v2.ClipBinding binding = 3;
+   */
+  binding?: ClipBinding;
+};
+
+/**
+ * Describes the message pinix.v2.SetBindingRequest.
+ * Use `create(SetBindingRequestSchema)` to create a new message.
+ */
+export const SetBindingRequestSchema: GenMessage<SetBindingRequest> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 47);
+
+/**
+ * @generated from message pinix.v2.SetBindingResponse
+ */
+export type SetBindingResponse = Message<"pinix.v2.SetBindingResponse"> & {
+};
+
+/**
+ * Describes the message pinix.v2.SetBindingResponse.
+ * Use `create(SetBindingResponseSchema)` to create a new message.
+ */
+export const SetBindingResponseSchema: GenMessage<SetBindingResponse> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 48);
+
+/**
+ * @generated from message pinix.v2.RemoveBindingRequest
+ */
+export type RemoveBindingRequest = Message<"pinix.v2.RemoveBindingRequest"> & {
+  /**
+   * @generated from field: string clip_name = 1;
+   */
+  clipName: string;
+
+  /**
+   * @generated from field: string slot = 2;
+   */
+  slot: string;
+};
+
+/**
+ * Describes the message pinix.v2.RemoveBindingRequest.
+ * Use `create(RemoveBindingRequestSchema)` to create a new message.
+ */
+export const RemoveBindingRequestSchema: GenMessage<RemoveBindingRequest> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 49);
+
+/**
+ * @generated from message pinix.v2.RemoveBindingResponse
+ */
+export type RemoveBindingResponse = Message<"pinix.v2.RemoveBindingResponse"> & {
+};
+
+/**
+ * Describes the message pinix.v2.RemoveBindingResponse.
+ * Use `create(RemoveBindingResponseSchema)` to create a new message.
+ */
+export const RemoveBindingResponseSchema: GenMessage<RemoveBindingResponse> = /*@__PURE__*/
+  messageDesc(file_pinix_v2_hub, 50);
 
 /**
  * Hub 路由表中的 Clip 条目。
@@ -1444,6 +1622,30 @@ export const HubService: GenService<{
     methodKind: "unary";
     input: typeof RemoveClipRequestSchema;
     output: typeof RemoveClipResponseSchema;
+  },
+  /**
+   * @generated from rpc pinix.v2.HubService.GetBindings
+   */
+  getBindings: {
+    methodKind: "unary";
+    input: typeof GetBindingsRequestSchema;
+    output: typeof GetBindingsResponseSchema;
+  },
+  /**
+   * @generated from rpc pinix.v2.HubService.SetBinding
+   */
+  setBinding: {
+    methodKind: "unary";
+    input: typeof SetBindingRequestSchema;
+    output: typeof SetBindingResponseSchema;
+  },
+  /**
+   * @generated from rpc pinix.v2.HubService.RemoveBinding
+   */
+  removeBinding: {
+    methodKind: "unary";
+    input: typeof RemoveBindingRequestSchema;
+    output: typeof RemoveBindingResponseSchema;
   },
 }> = /*@__PURE__*/
   serviceDesc(file_pinix_v2_hub, 0);
