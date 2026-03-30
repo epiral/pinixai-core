@@ -1,7 +1,7 @@
 {
   "name": "@pinixai/core",
-  "version": "0.8.0",
-  "description": "Clip framework for Pinix \u2014 define once, run as CLI / MCP / Pinix bridge",
+  "version": "0.9.0",
+  "description": "Clip framework for Pinix — define once, run as CLI / MCP / Pinix bridge",
   "main": "src/index.ts",
   "module": "src/index.ts",
   "type": "module",
@@ -25,6 +25,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@bufbuild/protoc-gen-es": "^2.11.0",
     "@types/bun": "^1.3.11"
   },
   "peerDependencies": {
