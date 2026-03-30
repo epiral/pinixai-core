@@ -1,5 +1,6 @@
 import { dirname, join, resolve, sep } from "node:path";
 import { getClipName, type Clip } from "./clip";
+import type { Stream } from "./handler";
 import { zodToManifestType } from "./manifest";
 
 const CORS_HEADERS = {
@@ -135,6 +136,14 @@ function listCommands(clip: Clip): Response {
   return jsonResponse({ commands });
 }
 
+function wantsSSE(request: Request): boolean {
+  return (request.headers.get("accept") ?? "").includes("text/event-stream");
+}
+
+function sseEvent(data: unknown): string {
+  return `data: ${JSON.stringify(data)}\n\n`;
+}
+
 async function handleCommandRequest(clip: Clip, commandName: string, request: Request): Promise<Response> {
   const commandHandler = clip.getCommands().get(commandName);
 
@@ -158,20 +167,59 @@ async function handleCommandRequest(clip: Clip, commandName: string, request: Re
     return errorResponse(toErrorMessage(error), 400);
   }
 
-  let output: unknown;
+  if (!wantsSSE(request)) {
+    let output: unknown;
 
-  try {
-    output = await commandHandler.fn(parsedInput as never);
-  } catch (error) {
-    return errorResponse(toErrorMessage(error), 500);
+    try {
+      output = await commandHandler.fn(parsedInput as never);
+    } catch (error) {
+      return errorResponse(toErrorMessage(error), 500);
+    }
+
+    try {
+      const parsedOutput = await commandHandler.output.parseAsync(output);
+      return jsonResponse(parsedOutput);
+    } catch (error) {
+      return errorResponse(toErrorMessage(error), 500);
+    }
   }
 
-  try {
-    const parsedOutput = await commandHandler.output.parseAsync(output);
-    return jsonResponse(parsedOutput);
-  } catch (error) {
-    return errorResponse(toErrorMessage(error), 500);
-  }
+  // SSE streaming: pass a Stream to the handler, emit chunks as SSE events
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const encoder = new TextEncoder();
+
+  const stream: Stream = {
+    chunk(data: unknown) {
+      const raw = typeof data === "string" ? data : JSON.stringify(data);
+      // Each JSONL line becomes a separate SSE event (matches pinixd behavior)
+      for (const line of raw.split("\n")) {
+        const trimmed = line.trim();
+        if (trimmed) {
+          writer.write(encoder.encode(`data: ${trimmed}\n\n`)).catch(() => {});
+        }
+      }
+    },
+  };
+
+  commandHandler.fn(parsedInput as never, stream).then(
+    () => {
+      writer.write(encoder.encode("event: done\ndata: {}\n\n")).catch(() => {});
+      writer.close().catch(() => {});
+    },
+    (error) => {
+      writer.write(encoder.encode(sseEvent({ error: toErrorMessage(error) }))).catch(() => {});
+      writer.close().catch(() => {});
+    },
+  );
+
+  return new Response(readable, {
+    headers: createHeaders({
+      "Content-Type": "text/event-stream",
+      "Cache-Control": "no-cache",
+      "Connection": "keep-alive",
+    }),
+  });
 }
 
 async function handleStaticRequest(pathname: string): Promise<Response> {
