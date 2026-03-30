@@ -1,15 +1,23 @@
-import { createClient } from "@connectrpc/connect";
+import { createClient, type Interceptor } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { HubService, type ClipInfo } from "./gen/hub_pb";
 
-function getTransport(hubUrl?: string) {
+function authInterceptor(token: string): Interceptor {
+  return (next) => (req) => {
+    req.header.set("Authorization", `Bearer ${token}`);
+    return next(req);
+  };
+}
+
+function getTransport(hubUrl?: string, authToken?: string) {
   return createConnectTransport({
     baseUrl: hubUrl ?? process.env.PINIX_URL ?? "http://127.0.0.1:9000",
+    interceptors: authToken ? [authInterceptor(authToken)] : [],
   });
 }
 
-function getClient(hubUrl?: string) {
-  return createClient(HubService, getTransport(hubUrl));
+function getClient(hubUrl?: string, authToken?: string) {
+  return createClient(HubService, getTransport(hubUrl, authToken));
 }
 
 const encoder = new TextEncoder();
@@ -25,8 +33,9 @@ export async function hubInvoke(
   input: unknown,
   clipToken?: string,
   hubUrl?: string,
+  authToken?: string,
 ): Promise<unknown> {
-  const client = getClient(hubUrl);
+  const client = getClient(hubUrl, authToken);
   const inputBytes = encoder.encode(JSON.stringify(input));
 
   let outputBytes = new Uint8Array(0);
@@ -61,8 +70,8 @@ export async function hubInvoke(
 /**
  * List all clips registered on the Hub.
  */
-export async function hubListClips(hubUrl?: string): Promise<ClipInfo[]> {
-  const client = getClient(hubUrl);
+export async function hubListClips(hubUrl?: string, authToken?: string): Promise<ClipInfo[]> {
+  const client = getClient(hubUrl, authToken);
   const response = await client.listClips({});
   return response.clips;
 }
