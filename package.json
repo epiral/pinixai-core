@@ -5,6 +5,10 @@
   "main": "src/index.ts",
   "module": "src/index.ts",
   "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./web": "./src/web.ts"
+  },
   "files": [
     "src"
   ],
