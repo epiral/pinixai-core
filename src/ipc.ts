@@ -9,7 +9,7 @@ import { createIPCManifest, type IPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
 
-type MessageType = "register" | "registered" | "invoke";
+type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done";
 
 interface BaseMessage {
   type: MessageType;
@@ -37,10 +37,28 @@ interface InvokeMessage extends BaseMessage {
   clip_token?: string;
 }
 
+interface ResultMessage extends BaseMessage {
+  type: "result";
+  id: string;
+  output?: unknown;
+}
+
+interface ErrorMessage extends BaseMessage {
+  type: "error";
+  id: string;
+  error: string;
+}
+
 // === State ===
 
 let registeredAlias: string | undefined;
 const bindings = loadBindings();
+const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+let idCounter = 0;
+
+function nextId(): string {
+  return `c${++idCounter}`;
+}
 
 function loadBindings(): Bindings {
   const bindingsPath = join(dirname(Bun.main), "bindings.json");
@@ -111,10 +129,18 @@ function send(msg: Record<string, unknown>): void {
 export async function invoke(slot: string, command: string, input: unknown): Promise<unknown> {
   const binding = bindings[slot];
   const clipName = binding?.alias ?? slot;
-  const clipToken = binding?.clip_token;
-  const hubUrl = binding?.hub;
 
-  return hubInvoke(clipName, command, input, clipToken, hubUrl);
+  if (binding?.hub) {
+    // Cross-Hub: connect directly to the target Hub
+    return hubInvoke(clipName, command, input, binding.clip_token, binding.hub, binding.hub_token);
+  }
+
+  // Same runtime: IPC → pinixd routes to the target clip
+  const id = nextId();
+  return new Promise((resolve, reject) => {
+    pendingInvokes.set(id, { resolve, reject });
+    send({ id, type: "invoke", clip: clipName, command, input, clip_token: binding?.clip_token });
+  });
 }
 
 // === Stdout Protection ===
@@ -191,6 +217,26 @@ export async function serveIPC(clip: Clip): Promise<void> {
           inflight--;
           resetIdleTimer();
         });
+        break;
+      }
+
+      case "result": {
+        const res = msg as ResultMessage;
+        const pending = pendingInvokes.get(res.id!);
+        if (pending) {
+          pendingInvokes.delete(res.id!);
+          pending.resolve(res.output);
+        }
+        break;
+      }
+
+      case "error": {
+        const err = msg as ErrorMessage;
+        const pending = pendingInvokes.get(err.id!);
+        if (pending) {
+          pendingInvokes.delete(err.id!);
+          pending.reject(new Error(err.error));
+        }
         break;
       }
 
