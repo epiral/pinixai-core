@@ -25,16 +25,13 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@bufbuild/protoc-gen-es": "^2.11.0",
     "@types/bun": "^1.3.11"
   },
   "peerDependencies": {
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@bufbuild/protobuf": "^2.11.0",
-    "@connectrpc/connect": "^2.1.1",
-    "@connectrpc/connect-web": "^2.1.1",
+    "@pinixai/hub-client": "file:../../hub-client",
     "@modelcontextprotocol/sdk": "^1.27.1",
     "zod": "^4.3.6"
   }
