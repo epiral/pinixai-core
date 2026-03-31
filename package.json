@@ -31,7 +31,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@pinixai/hub-client": "file:../../hub-client",
+    "@pinixai/hub-client": "^0.1.1",
     "@modelcontextprotocol/sdk": "^1.27.1",
     "zod": "^4.3.6"
   }
