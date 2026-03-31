@@ -14,7 +14,7 @@ function unwrapSchema(schema: ZodType): ZodType {
     schema instanceof z.ZodNullable ||
     schema instanceof z.ZodDefault
   ) {
-    return unwrapSchema(schema.unwrap());
+    return unwrapSchema(schema.unwrap() as ZodType);
   }
 
   return schema;
@@ -30,7 +30,7 @@ function getSchemaDescription(schema: ZodType): string | undefined {
     schema instanceof z.ZodNullable ||
     schema instanceof z.ZodDefault
   ) {
-    return getSchemaDescription(schema.unwrap());
+    return getSchemaDescription(schema.unwrap() as ZodType);
   }
 
   return undefined;
@@ -42,7 +42,7 @@ function getDefaultValue(schema: ZodType): unknown {
   }
 
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-    return getDefaultValue(schema.unwrap());
+    return getDefaultValue(schema.unwrap() as ZodType);
   }
 
   return undefined;
@@ -54,7 +54,7 @@ function hasDefaultValue(schema: ZodType): boolean {
   }
 
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodNullable) {
-    return hasDefaultValue(schema.unwrap());
+    return hasDefaultValue(schema.unwrap() as ZodType);
   }
 
   return false;
@@ -62,7 +62,7 @@ function hasDefaultValue(schema: ZodType): boolean {
 
 function formatOptionType(schema: ZodType): string {
   if (schema instanceof z.ZodOptional || schema instanceof z.ZodDefault) {
-    return formatOptionType(schema.unwrap());
+    return formatOptionType(schema.unwrap() as ZodType);
   }
 
   return zodToManifestType(schema);
@@ -209,7 +209,7 @@ export function parseCLIArgs<T extends ZodObject>(args: string[], schema: T): z.
 
     if (normalized instanceof z.ZodArray) {
       const current = values[key];
-      const parsed = parseScalarValue(next, normalized.element);
+      const parsed = parseScalarValue(next, normalized.element as ZodType);
 
       if (Array.isArray(current)) {
         current.push(parsed);

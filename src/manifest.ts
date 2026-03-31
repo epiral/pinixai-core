@@ -35,15 +35,15 @@ function getDefaultValue(schema: ZodType): unknown {
 
 export function zodToManifestType(schema: ZodType): string {
   if (schema instanceof z.ZodOptional) {
-    return `${zodToManifestType(schema.unwrap())} (optional)`;
+    return `${zodToManifestType(schema.unwrap() as ZodType)} (optional)`;
   }
 
   if (schema instanceof z.ZodDefault) {
-    return `${zodToManifestType(schema.unwrap())} (default: ${formatLiteralValue(getDefaultValue(schema))})`;
+    return `${zodToManifestType(schema.unwrap() as ZodType)} (default: ${formatLiteralValue(getDefaultValue(schema))})`;
   }
 
   if (schema instanceof z.ZodNullable) {
-    return `${zodToManifestType(schema.unwrap())} | null`;
+    return `${zodToManifestType(schema.unwrap() as ZodType)} | null`;
   }
 
   if (schema instanceof z.ZodString) {
@@ -68,7 +68,7 @@ export function zodToManifestType(schema: ZodType): string {
   }
 
   if (schema instanceof z.ZodArray) {
-    return `Array<${zodToManifestType(schema.element)}>`;
+    return `Array<${zodToManifestType(schema.element as ZodType)}>`;
   }
 
   if (schema instanceof z.ZodObject) {
@@ -79,12 +79,12 @@ export function zodToManifestType(schema: ZodType): string {
     }
 
     return `{ ${entries
-      .map(([key, value]) => `${key}${value.isOptional() ? "?" : ""}: ${zodToManifestType(value)}`)
+      .map(([key, value]) => `${key}${(value as ZodType).isOptional() ? "?" : ""}: ${zodToManifestType(value as ZodType)}`)
       .join("; ")} }`;
   }
 
   if (schema instanceof z.ZodUnion) {
-    return schema.options.map(zodToManifestType).join(" | ");
+    return (schema.options as ZodType[]).map(zodToManifestType).join(" | ");
   }
 
   if (schema instanceof z.ZodNull) {

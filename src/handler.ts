@@ -15,5 +15,12 @@ export function handler<I extends ZodType, O extends ZodType>(
   output: O,
   fn: (input: z.infer<I>, stream?: Stream) => Promise<z.infer<O>>,
 ): HandlerDef<I, O> {
-  return { input, output, fn };
+  return {
+    input,
+    output,
+    fn: async (raw: z.infer<I>, stream?: Stream) => {
+      const parsed = await input.parseAsync(raw);
+      return fn(parsed, stream);
+    },
+  };
 }

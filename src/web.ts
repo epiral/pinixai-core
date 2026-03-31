@@ -18,9 +18,7 @@
  *   - Hub (pinixd / Cloud Hub): Connect-RPC Invoke RPC
  */
 
-import { createClient } from "@connectrpc/connect";
-import { createConnectTransport } from "@connectrpc/connect-web";
-import { HubService } from "./gen/hub_pb";
+import { createHubClient, hubInvoke } from "@pinixai/hub-client";
 
 // ── Public types ──
 
@@ -70,13 +68,14 @@ function isStreamEvent(value: unknown): value is StreamEvent {
  * Standalone: everything else (typically root /)
  */
 function detectEnv(): Env {
-  const pathname = globalThis.location?.pathname ?? "/";
+  const loc = globalThis as unknown as { location?: { pathname: string; origin: string } };
+  const pathname = loc.location?.pathname ?? "/";
   const match = pathname.match(/^\/clips\/([^/]+)\//);
-  if (match) {
+  if (match && loc.location) {
     return {
       mode: "hub",
-      clipName: match[1],
-      hubUrl: globalThis.location.origin,
+      clipName: match[1]!,
+      hubUrl: loc.location.origin,
     };
   }
   return { mode: "standalone" };
@@ -155,7 +154,7 @@ function httpInvokeStream(
           }
 
           const dataMatch = part.match(/^data:\s*(.+)$/m);
-          if (!dataMatch) continue;
+          if (!dataMatch?.[1]) continue;
 
           try {
             const chunk = JSON.parse(dataMatch[1]);
@@ -182,41 +181,14 @@ function httpInvokeStream(
   };
 }
 
-// ── Hub transport (Connect-RPC) ──
-
-function createHubClient(hubUrl: string) {
-  const transport = createConnectTransport({ baseUrl: hubUrl });
-  return createClient(HubService, transport);
-}
+// ── Hub transport (Connect-RPC via @pinixai/hub-client) ──
 
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
 async function rpcInvoke(env: HubEnv, command: string, opts: InvokeOptions): Promise<unknown> {
-  const client = createHubClient(env.hubUrl);
-  const input = encoder.encode(JSON.stringify(opts));
-
-  let outputBytes = new Uint8Array(0);
-
-  for await (const response of client.invoke({
-    clipName: env.clipName,
-    command,
-    input,
-    clipToken: "",
-  })) {
-    if (response.error) {
-      throw new Error(response.error.message || response.error.code || "Hub invoke error");
-    }
-    if (response.output.length > 0) {
-      const merged = new Uint8Array(outputBytes.length + response.output.length);
-      merged.set(outputBytes);
-      merged.set(response.output, outputBytes.length);
-      outputBytes = merged;
-    }
-  }
-
-  if (outputBytes.length === 0) return undefined;
-  return JSON.parse(decoder.decode(outputBytes));
+  const client = createHubClient({ baseUrl: env.hubUrl });
+  return hubInvoke(client, env.clipName, command, opts);
 }
 
 function rpcInvokeStream(
@@ -230,7 +202,7 @@ function rpcInvokeStream(
   let cancelled = false;
 
   (async () => {
-    const client = createHubClient(env.hubUrl);
+    const client = createHubClient({ baseUrl: env.hubUrl });
     const input = encoder.encode(JSON.stringify(opts));
 
     try {
@@ -248,7 +220,6 @@ function rpcInvokeStream(
 
         if (response.output.length > 0) {
           const text = decoder.decode(response.output);
-          // Each output chunk may contain JSONL lines
           for (const line of text.split("\n")) {
             const trimmed = line.trim();
             if (!trimmed) continue;
