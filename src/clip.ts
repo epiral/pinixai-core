@@ -183,7 +183,7 @@ export abstract class Clip {
     }
 
     const clip = target as Clip;
-    const value = (clip as Record<string, unknown>)[propertyKey];
+    const value = (clip as unknown as Record<string, unknown>)[propertyKey];
 
     if (!isHandlerDef(value)) {
       throw new Error(`@command can only decorate handler() fields: ${propertyKey}`);

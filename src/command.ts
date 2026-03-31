@@ -1,15 +1,13 @@
 import type { HandlerDef } from "./handler";
 
-type CommandHost = {
-  constructor: {
-    _registerCommand(target: object, propertyKey: string, describe?: string): void;
-  };
-};
+interface CommandRegistrar {
+  _registerCommand(target: object, propertyKey: string, describe?: string): void;
+}
 
 export function command(describe?: string) {
-  return function (
+  return function <This extends object>(
     _value: undefined,
-    context: ClassFieldDecoratorContext<CommandHost, HandlerDef>,
+    context: ClassFieldDecoratorContext<This, HandlerDef>,
   ): void {
     if (context.static) {
       throw new Error("@command can only be used on instance fields");
@@ -20,8 +18,11 @@ export function command(describe?: string) {
     }
 
     context.addInitializer(function () {
-      const constructor = this.constructor as CommandHost["constructor"];
-      constructor._registerCommand(this, String(context.name), describe);
+      (this.constructor as unknown as CommandRegistrar)._registerCommand(
+        this,
+        String(context.name),
+        describe,
+      );
     });
   };
 }

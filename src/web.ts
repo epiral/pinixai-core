@@ -68,13 +68,14 @@ function isStreamEvent(value: unknown): value is StreamEvent {
  * Standalone: everything else (typically root /)
  */
 function detectEnv(): Env {
-  const pathname = globalThis.location?.pathname ?? "/";
+  const loc = globalThis as unknown as { location?: { pathname: string; origin: string } };
+  const pathname = loc.location?.pathname ?? "/";
   const match = pathname.match(/^\/clips\/([^/]+)\//);
-  if (match) {
+  if (match && loc.location) {
     return {
       mode: "hub",
-      clipName: match[1],
-      hubUrl: globalThis.location.origin,
+      clipName: match[1]!,
+      hubUrl: loc.location.origin,
     };
   }
   return { mode: "standalone" };
@@ -153,7 +154,7 @@ function httpInvokeStream(
           }
 
           const dataMatch = part.match(/^data:\s*(.+)$/m);
-          if (!dataMatch) continue;
+          if (!dataMatch?.[1]) continue;
 
           try {
             const chunk = JSON.parse(dataMatch[1]);
