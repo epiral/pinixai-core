@@ -9,7 +9,7 @@ import { createIPCManifest, type IPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
 
-type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done";
+type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done" | "list_clips" | "list_clips_result";
 
 interface BaseMessage {
   type: MessageType;
@@ -49,11 +49,25 @@ interface ErrorMessage extends BaseMessage {
   error: string;
 }
 
+interface ListClipsResultMessage extends BaseMessage {
+  type: "list_clips_result";
+  id: string;
+  clips: RuntimeClipInfo[];
+}
+
+export interface RuntimeClipInfo {
+  name: string;
+  package: string;
+  version: string;
+  commands: { name: string; description?: string }[];
+}
+
 // === State ===
 
 let registeredAlias: string | undefined;
 const bindings = loadBindings();
 const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
+const pendingListClips = new Map<string, { resolve: (v: RuntimeClipInfo[]) => void; reject: (e: Error) => void }>();
 let idCounter = 0;
 
 function nextId(): string {
@@ -140,6 +154,22 @@ export async function invoke(slot: string, command: string, input: unknown): Pro
   return new Promise((resolve, reject) => {
     pendingInvokes.set(id, { resolve, reject });
     send({ id, type: "invoke", clip: clipName, command, input, clip_token: binding?.clip_token });
+  });
+}
+
+export async function listClips(): Promise<RuntimeClipInfo[]> {
+  const id = nextId();
+  return new Promise((resolve, reject) => {
+    pendingListClips.set(id, { resolve, reject });
+    send({ id, type: "list_clips" });
+  });
+}
+
+export async function invokeClip(alias: string, command: string, input: unknown): Promise<unknown> {
+  const id = nextId();
+  return new Promise((resolve, reject) => {
+    pendingInvokes.set(id, { resolve, reject });
+    send({ id, type: "invoke", clip: alias, command, input });
   });
 }
 
@@ -232,10 +262,25 @@ export async function serveIPC(clip: Clip): Promise<void> {
 
       case "error": {
         const err = msg as ErrorMessage;
-        const pending = pendingInvokes.get(err.id!);
-        if (pending) {
+        const pendingInvoke = pendingInvokes.get(err.id!);
+        if (pendingInvoke) {
           pendingInvokes.delete(err.id!);
-          pending.reject(new Error(err.error));
+          pendingInvoke.reject(new Error(err.error));
+        }
+        const pendingList = pendingListClips.get(err.id!);
+        if (pendingList) {
+          pendingListClips.delete(err.id!);
+          pendingList.reject(new Error(err.error));
+        }
+        break;
+      }
+
+      case "list_clips_result": {
+        const res = msg as ListClipsResultMessage;
+        const pending = pendingListClips.get(res.id!);
+        if (pending) {
+          pendingListClips.delete(res.id!);
+          pending.resolve(res.clips ?? []);
         }
         break;
       }
