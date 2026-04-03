@@ -59,7 +59,7 @@ export interface RuntimeClipInfo {
   name: string;
   package: string;
   version: string;
-  commands: { name: string; description?: string }[];
+  commands: { name: string; description?: string; input?: string; output?: string }[];
 }
 
 // === State ===
