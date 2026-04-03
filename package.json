@@ -1,6 +1,6 @@
 {
   "name": "@pinixai/core",
-  "version": "0.11.0",
+  "version": "0.11.1",
   "description": "Clip framework for Pinix — define once, run as CLI / MCP / Pinix bridge",
   "main": "src/index.ts",
   "module": "src/index.ts",
