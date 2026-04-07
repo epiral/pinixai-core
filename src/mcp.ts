@@ -21,7 +21,7 @@ export async function serveMCP(clip: Clip): Promise<void> {
         inputSchema: commandHandler.input,
       },
       async (input) => {
-        const output = await commandHandler.fn(input);
+        const output = await commandHandler.fn(input, "");
         const parsedOutput = commandHandler.output.parse(output);
 
         return {

@@ -123,6 +123,14 @@ async function readJSONBody(request: Request): Promise<unknown> {
   }
 }
 
+function extractStdin(input: unknown): string {
+  if (input && typeof input === "object" && "stdin" in input) {
+    const value = (input as Record<string, unknown>).stdin;
+    return typeof value === "string" ? value : "";
+  }
+  return "";
+}
+
 function listCommands(clip: Clip): Response {
   const commands = Array.from(clip.getCommands().entries()).map(([name, commandHandler]) => ({
     name,
@@ -159,6 +167,9 @@ async function handleCommandRequest(clip: Clip, commandName: string, request: Re
     return errorResponse(toErrorMessage(error), 400);
   }
 
+  // Extract stdin from input before schema validation
+  const stdin = extractStdin(input);
+
   let parsedInput: unknown;
 
   try {
@@ -171,7 +182,7 @@ async function handleCommandRequest(clip: Clip, commandName: string, request: Re
     let output: unknown;
 
     try {
-      output = await commandHandler.fn(parsedInput as never);
+      output = await commandHandler.fn(parsedInput as never, stdin);
     } catch (error) {
       return errorResponse(toErrorMessage(error), 500);
     }
@@ -202,7 +213,7 @@ async function handleCommandRequest(clip: Clip, commandName: string, request: Re
     },
   };
 
-  commandHandler.fn(parsedInput as never, stream).then(
+  commandHandler.fn(parsedInput as never, stdin, stream).then(
     () => {
       writer.write(encoder.encode("event: done\ndata: {}\n\n")).catch(() => {});
       writer.close().catch(() => {});
