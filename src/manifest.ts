@@ -176,11 +176,12 @@ function findJsonFile(filename: string): Record<string, unknown> | null {
 }
 
 function resolvePackageInfo(): { package?: string; version?: string } {
+  const clipJson = findJsonFile("clip.json");
   const packageJson = findJsonFile("package.json");
 
   return {
-    package: asString(packageJson?.name),
-    version: asString(packageJson?.version),
+    package: asString(clipJson?.name) ?? asString(packageJson?.name),
+    version: asString(clipJson?.version) ?? asString(packageJson?.version),
   };
 }
 
