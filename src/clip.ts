@@ -91,7 +91,7 @@ export abstract class Clip {
 
     try {
       const input = parseCLIArgs(restArgs, commandHandler.input);
-      const output = await commandHandler.fn(input);
+      const output = await commandHandler.fn(input, "");
       const parsedOutput = commandHandler.output.parse(output);
       console.log(JSON.stringify(parsedOutput));
     } catch (error) {

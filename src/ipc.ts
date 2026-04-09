@@ -304,7 +304,9 @@ async function handleInvoke(
   }
 
   try {
-    const parsed = await cmd.input.parseAsync(msg.input ?? {});
+    const rawInput = (msg.input ?? {}) as Record<string, unknown>;
+    const stdin = typeof rawInput.stdin === "string" ? rawInput.stdin : "";
+    const parsed = await cmd.input.parseAsync(rawInput);
     let streamed = false;
     const stream: Stream = {
       chunk(data: unknown): void {
@@ -313,7 +315,7 @@ async function handleInvoke(
       },
     };
 
-    const output = await cmd.fn(parsed, stream);
+    const output = await cmd.fn(parsed, stdin, stream);
 
     if (streamed) {
       send({ id: msg.id, type: "done" });
