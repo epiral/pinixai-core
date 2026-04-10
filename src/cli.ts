@@ -207,7 +207,13 @@ export function parseCLIArgs<T extends ZodObject>(args: string[], schema: T): z.
       throw new Error(`Missing value for --${key}`);
     }
 
-    if (normalized instanceof z.ZodArray) {
+    if (normalized instanceof z.ZodRecord) {
+      try {
+        values[key] = JSON.parse(next);
+      } catch {
+        throw new Error(`Invalid JSON value for --${key}: ${next}`);
+      }
+    } else if (normalized instanceof z.ZodArray) {
       const current = values[key];
       const parsed = parseScalarValue(next, normalized.element as ZodType);
 

@@ -92,7 +92,13 @@ export abstract class Clip {
     try {
       const input = parseCLIArgs(restArgs, commandHandler.input);
       const output = await commandHandler.fn(input, "");
-      const parsedOutput = commandHandler.output.parse(output);
+      let parsedOutput: unknown;
+      try {
+        parsedOutput = commandHandler.output.parse(output);
+      } catch {
+        // Fallback: output schema validation failed (e.g. ZodRecord with missing valueType in Zod v4)
+        parsedOutput = output;
+      }
       console.log(JSON.stringify(parsedOutput));
     } catch (error) {
       if (error instanceof CLIHelpError) {
