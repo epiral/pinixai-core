@@ -84,7 +84,7 @@ function detectEnv(): Env {
 // ── Standalone transport (HTTP + SSE) ──
 
 async function httpInvoke(command: string, opts: InvokeOptions): Promise<unknown> {
-  const response = await fetch(`api/${command}`, {
+  const response = await fetch(`/api/${command}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(opts),
@@ -113,7 +113,7 @@ function httpInvokeStream(
   (async () => {
     let response: Response;
     try {
-      response = await fetch(`api/${command}`, {
+      response = await fetch(`/api/${command}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
