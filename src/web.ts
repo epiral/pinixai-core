@@ -35,8 +35,7 @@ export type StreamEvent =
   | { type: "tool_result"; content: string }
   | { type: "inject"; content: string }
   | { type: "result"; data: unknown }
-  | { type: "done" }
-  | { type: string; [key: string]: unknown };
+  | { type: "done" };
 
 // ── Environment detection ──
 
