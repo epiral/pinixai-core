@@ -51,14 +51,9 @@ interface HubEnv {
 
 type Env = StandaloneEnv | HubEnv;
 
-const STREAM_EVENT_TYPES = new Set([
-  "info", "text", "thinking", "tool_call", "tool_result", "inject", "result", "done",
-]);
-
 function isStreamEvent(value: unknown): value is StreamEvent {
   if (!value || typeof value !== "object") return false;
-  const type = (value as { type?: unknown }).type;
-  return typeof type === "string" && STREAM_EVENT_TYPES.has(type);
+  return typeof (value as { type?: unknown }).type === "string";
 }
 
 /**
