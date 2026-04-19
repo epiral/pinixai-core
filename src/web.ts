@@ -183,7 +183,7 @@ const decoder = new TextDecoder();
 
 async function rpcInvoke(env: HubEnv, command: string, opts: InvokeOptions): Promise<unknown> {
   const client = createHubClient({ baseUrl: env.hubUrl });
-  return hubInvoke(client, env.clipName, command, opts);
+  return hubInvoke(client, env.clipName, command.replace(/\//g, " "), opts);
 }
 
 function rpcInvokeStream(
@@ -202,7 +202,7 @@ function rpcInvokeStream(
 
     try {
       for await (const response of client.invoke(
-        { clipName: env.clipName, command, input, clipToken: "" },
+        { clipName: env.clipName, command: command.replace(/\//g, " "), input, clipToken: "" },
         { signal: controller.signal },
       )) {
         if (cancelled) return;
