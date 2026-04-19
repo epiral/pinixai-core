@@ -1,4 +1,4 @@
-import type { HandlerDef } from "./handler";
+import type { GroupDef, HandlerDef } from "./handler";
 
 interface CommandRegistrar {
   _registerCommand(target: object, propertyKey: string, describe?: string): void;
@@ -7,7 +7,7 @@ interface CommandRegistrar {
 export function command(describe?: string) {
   return function <This extends object>(
     _value: undefined,
-    context: ClassFieldDecoratorContext<This, HandlerDef>,
+    context: ClassFieldDecoratorContext<This, HandlerDef | GroupDef>,
   ): void {
     if (context.static) {
       throw new Error("@command can only be used on instance fields");

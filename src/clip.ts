@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { CLIHelpError, formatCLIHelp, parseCLIArgs } from "./cli";
 import type { HandlerDef } from "./handler";
+import { isGroupDef } from "./handler";
 import { serveHTTP } from "./http";
 import { serveIPC } from "./ipc";
 import { serveMCP } from "./mcp";
@@ -35,6 +36,7 @@ export abstract class Clip {
 
   protected readonly commands = new Map<string, HandlerDef>();
   protected readonly commandDescriptions = new Map<string, string>();
+  protected readonly commandGroups = new Map<string, string>();
 
   async start(): Promise<void> {
     const args = process.argv.slice(2);
@@ -75,14 +77,21 @@ export abstract class Clip {
       return;
     }
 
-    const commandName = modeOrCommand;
-    const commandHandler = this.commands.get(commandName);
+    // Resolve command: collect non-flag tokens as command path, greedy match longest
+    const { commandName, commandArgs } = this.resolveCommand(args);
 
-    if (!commandHandler) {
-      console.error(`Unknown command: ${commandName}`);
+    if (!commandName) {
+      // Check if first token is a group name → show group help
+      if (this.commandGroups.has(modeOrCommand)) {
+        console.log(this.printGroupHelp(modeOrCommand));
+        return;
+      }
+      console.error(`Unknown command: ${modeOrCommand}`);
       console.log(this.printHelp());
       return;
     }
+
+    const commandHandler = this.commands.get(commandName)!;
 
     if (!(commandHandler.input instanceof z.ZodObject)) {
       console.error(`CLI mode only supports object input schemas for command: ${commandName}`);
@@ -90,13 +99,12 @@ export abstract class Clip {
     }
 
     try {
-      const input = parseCLIArgs(restArgs, commandHandler.input);
+      const input = parseCLIArgs(commandArgs, commandHandler.input);
       const output = await commandHandler.fn(input, "");
       let parsedOutput: unknown;
       try {
         parsedOutput = commandHandler.output.parse(output);
       } catch {
-        // Fallback: output schema validation failed (e.g. ZodRecord with missing valueType in Zod v4)
         parsedOutput = output;
       }
       console.log(JSON.stringify(parsedOutput));
@@ -108,6 +116,40 @@ export abstract class Clip {
 
       console.error(error instanceof Error ? error.message : String(error));
     }
+  }
+
+  private resolveCommand(args: string[]): { commandName: string | null; commandArgs: string[] } {
+    // Collect non-flag tokens as potential command path
+    const cmdParts: string[] = [];
+    let flagStart = args.length;
+
+    for (let i = 0; i < args.length; i++) {
+      const arg = args[i]!;
+      if (arg.startsWith("-")) {
+        flagStart = i;
+        break;
+      }
+      cmdParts.push(arg);
+    }
+
+    const remainingArgs = args.slice(flagStart);
+
+    // Greedy: try longest match first
+    for (let len = cmdParts.length; len > 0; len--) {
+      const candidate = cmdParts.slice(0, len).join(" ");
+      if (this.commands.has(candidate)) {
+        // Unused command tokens become part of args (shouldn't happen with one-level nesting)
+        const extra = cmdParts.slice(len);
+        return { commandName: candidate, commandArgs: [...extra, ...remainingArgs] };
+      }
+    }
+
+    // Check if it's "group --help"
+    if (cmdParts.length > 0 && this.commandGroups.has(cmdParts[0]!) && remainingArgs.includes("--help")) {
+      return { commandName: null, commandArgs: [] };
+    }
+
+    return { commandName: null, commandArgs: [] };
   }
 
   toManifest(): string {
@@ -144,7 +186,20 @@ export abstract class Clip {
       return lines.join("\n");
     }
 
+    // Separate top-level commands from grouped commands
+    const groupedCommands = new Set<string>();
+    for (const groupName of this.commandGroups.keys()) {
+      for (const cmdName of this.commands.keys()) {
+        if (cmdName.startsWith(`${groupName} `)) {
+          groupedCommands.add(cmdName);
+        }
+      }
+    }
+
+    // Print top-level commands first
     for (const [commandName, commandHandler] of this.commands) {
+      if (groupedCommands.has(commandName)) continue;
+
       const describe = this.commandDescriptions.get(commandName);
       lines.push(`  ${commandName}${describe ? ` - ${describe}` : ""}`);
 
@@ -153,6 +208,45 @@ export abstract class Clip {
         lines.push(...commandHelp.split("\n").map((line) => `    ${line}`));
       } else {
         lines.push(`    Input: ${commandHandler.input.constructor.name}`);
+      }
+    }
+
+    // Print groups with sub-commands
+    for (const [groupName, groupDesc] of this.commandGroups) {
+      lines.push(`  ${groupName} - ${groupDesc}`);
+      for (const [commandName, commandHandler] of this.commands) {
+        if (!commandName.startsWith(`${groupName} `)) continue;
+        const subName = commandName.slice(groupName.length + 1);
+        const describe = this.commandDescriptions.get(commandName);
+        lines.push(`    ${subName}${describe ? ` - ${describe}` : ""}`);
+
+        if (commandHandler.input instanceof z.ZodObject) {
+          const commandHelp = formatCLIHelp(commandHandler.input);
+          lines.push(...commandHelp.split("\n").map((line) => `      ${line}`));
+        }
+      }
+    }
+
+    return lines.join("\n");
+  }
+
+  private printGroupHelp(groupName: string): string {
+    const groupDesc = this.commandGroups.get(groupName);
+    const lines: string[] = [
+      `${groupName}${groupDesc ? ` - ${groupDesc}` : ""}`,
+      "",
+      "Sub-commands:",
+    ];
+
+    for (const [commandName, commandHandler] of this.commands) {
+      if (!commandName.startsWith(`${groupName} `)) continue;
+      const subName = commandName.slice(groupName.length + 1);
+      const describe = this.commandDescriptions.get(commandName);
+      lines.push(`  ${subName}${describe ? ` - ${describe}` : ""}`);
+
+      if (commandHandler.input instanceof z.ZodObject) {
+        const commandHelp = formatCLIHelp(commandHandler.input);
+        lines.push(...commandHelp.split("\n").map((line) => `    ${line}`));
       }
     }
 
@@ -165,6 +259,10 @@ export abstract class Clip {
 
   getCommandDescription(name: string): string | undefined {
     return this.commandDescriptions.get(name);
+  }
+
+  getCommandGroups(): ReadonlyMap<string, string> {
+    return this.commandGroups;
   }
 
   protected printCommandHelp(commandName: string, commandHandler: HandlerDef): string {
@@ -191,8 +289,18 @@ export abstract class Clip {
     const clip = target as Clip;
     const value = (clip as unknown as Record<string, unknown>)[propertyKey];
 
+    if (isGroupDef(value)) {
+      clip.commandGroups.set(propertyKey, value.description);
+      for (const [subName, sub] of Object.entries(value.commands)) {
+        const fullName = `${propertyKey} ${subName}`;
+        clip.commands.set(fullName, sub.handler);
+        clip.commandDescriptions.set(fullName, sub.description);
+      }
+      return;
+    }
+
     if (!isHandlerDef(value)) {
-      throw new Error(`@command can only decorate handler() fields: ${propertyKey}`);
+      throw new Error(`@command can only decorate handler() or commandGroup() fields: ${propertyKey}`);
     }
 
     clip.commands.set(propertyKey, value);

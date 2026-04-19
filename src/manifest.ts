@@ -17,6 +17,7 @@ export interface IPCManifest {
   dependencies: Record<string, { package: string; version: string }>;
   patterns?: string[];
   entities?: Record<string, unknown>;
+  groups?: Record<string, { description: string }>;
   package?: string;
   version?: string;
 }
@@ -144,22 +145,50 @@ export function generateManifest(clip: Clip): string {
   lines.push("Commands:");
 
   const commands = Array.from(clip.getCommands().entries());
+  const groups = clip.getCommandGroups();
 
   if (commands.length === 0) {
     lines.push("- none");
     return lines.join("\n");
   }
 
-  for (const [name, handler] of commands) {
-    lines.push(`- ${name}`);
+  // Collect grouped command names
+  const groupedCommands = new Set<string>();
+  for (const groupName of groups.keys()) {
+    for (const [cmdName] of commands) {
+      if (cmdName.startsWith(`${groupName} `)) {
+        groupedCommands.add(cmdName);
+      }
+    }
+  }
 
+  // Top-level commands
+  for (const [name, handler] of commands) {
+    if (groupedCommands.has(name)) continue;
+
+    lines.push(`- ${name}`);
     const describe = clip.getCommandDescription(name);
     if (describe) {
       lines.push(`  Description: ${describe}`);
     }
-
     lines.push(`  Input: ${zodToManifestType(handler.input)}`);
     lines.push(`  Output: ${zodToManifestType(handler.output)}`);
+  }
+
+  // Groups with sub-commands
+  for (const [groupName, groupDesc] of groups) {
+    lines.push(`- ${groupName} (${groupDesc})`);
+    for (const [name, handler] of commands) {
+      if (!name.startsWith(`${groupName} `)) continue;
+      const subName = name.slice(groupName.length + 1);
+      lines.push(`  - ${subName}`);
+      const describe = clip.getCommandDescription(name);
+      if (describe) {
+        lines.push(`    Description: ${describe}`);
+      }
+      lines.push(`    Input: ${zodToManifestType(handler.input)}`);
+      lines.push(`    Output: ${zodToManifestType(handler.output)}`);
+    }
   }
 
   return lines.join("\n");
@@ -226,6 +255,15 @@ export function createIPCManifest(clip: Clip): IPCManifest {
 
   if (clip.patterns.length > 0) {
     manifest.patterns = clip.patterns;
+  }
+
+  const groupEntries = clip.getCommandGroups();
+  if (groupEntries.size > 0) {
+    const groups: Record<string, { description: string }> = {};
+    for (const [name, description] of groupEntries) {
+      groups[name] = { description };
+    }
+    manifest.groups = groups;
   }
 
   const entityEntries = Object.entries(clip.entities);
