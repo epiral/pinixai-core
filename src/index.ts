@@ -1,7 +1,7 @@
 export { Clip } from "./clip";
 export type { Binding, Bindings } from "./bindings";
 export { command } from "./command";
-export { handler, type HandlerDef, type Stream } from "./handler";
+export { handler, commandGroup, type HandlerDef, type GroupDef, type Stream } from "./handler";
 export { serveHTTP } from "./http";
 export { hubInvoke, hubListClips } from "./hub";
 export { serveIPC, invoke, invokeClip, listClips, redirectConsoleToStderr } from "./ipc";

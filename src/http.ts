@@ -136,7 +136,7 @@ function listCommands(clip: Clip): Response {
     name,
     description: clip.getCommandDescription(name) ?? null,
     method: "POST",
-    path: `/api/${name}`,
+    path: `/api/${name.replace(/ /g, "/")}`,
     input: zodToManifestType(commandHandler.input),
     output: zodToManifestType(commandHandler.output),
   }));
@@ -282,11 +282,14 @@ async function handleRequest(clip: Clip, request: Request): Promise<Response> {
       return errorResponse("Method not allowed", 405);
     }
 
-    const commandName = pathname.slice("/api/".length);
+    const rawCommand = pathname.slice("/api/".length);
 
-    if (commandName.length === 0 || commandName.includes("/")) {
+    if (rawCommand.length === 0) {
       return errorResponse("Unknown command", 404);
     }
+
+    // Map URL path segments to space-separated command name: /api/schema/list → "schema list"
+    const commandName = decodeURIComponent(rawCommand).replace(/\//g, " ");
 
     return handleCommandRequest(clip, commandName, request);
   }

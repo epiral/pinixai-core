@@ -13,9 +13,10 @@ export async function serveMCP(clip: Clip): Promise<void> {
 
   for (const [name, commandHandler] of clip.getCommands()) {
     const description = clip.getCommandDescription(name);
+    const toolName = name.replace(/ /g, "_");
 
     server.registerTool(
-      name,
+      toolName,
       {
         description,
         inputSchema: commandHandler.input,
