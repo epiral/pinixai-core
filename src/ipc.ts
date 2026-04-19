@@ -59,6 +59,9 @@ export interface RuntimeClipInfo {
   name: string;
   package: string;
   version: string;
+  domain?: string;
+  description?: string;
+  patterns?: string[];
   commands: { name: string; description?: string; input?: string; output?: string }[];
 }
 
