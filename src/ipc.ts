@@ -297,7 +297,8 @@ async function handleInvoke(
   msg: InvokeMessage,
   commands: ReturnType<Clip["getCommands"]>,
 ): Promise<void> {
-  const cmd = commands.get(msg.command ?? "");
+  const commandName = (msg.command ?? "").replace(/\//g, " ");
+  const cmd = commands.get(commandName);
   if (!cmd) {
     send({ id: msg.id, type: "error", error: `unknown command: ${msg.command}` });
     return;
