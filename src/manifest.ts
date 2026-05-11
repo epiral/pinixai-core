@@ -73,7 +73,7 @@ export function zodToManifestType(schema: ZodType): string {
   }
 
   if (schema instanceof z.ZodRecord) {
-    const def = (schema as ZodType & { _zod?: { def?: { valueType?: ZodType } } })._zod?.def;
+    const def = (schema as unknown as { _zod?: { def?: { valueType?: ZodType } } })._zod?.def;
     if (def?.valueType) {
       return `Record<string, ${zodToManifestType(def.valueType)}>`;
     }

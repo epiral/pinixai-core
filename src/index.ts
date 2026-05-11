@@ -5,6 +5,8 @@ export { handler, commandGroup, type HandlerDef, type GroupDef, type Stream } fr
 export { serveHTTP } from "./http";
 export { hubInvoke, hubListClips } from "./hub";
 export { serveIPC, invoke, invokeClip, listClips, redirectConsoleToStderr } from "./ipc";
+export { data } from "./data";
+export type { ClipData, DataEntry, DataStat } from "./data";
 export type { RuntimeClipInfo } from "./ipc";
 export type { IPCCommandInfo, IPCManifest } from "./manifest";
 export { serveMCP } from "./mcp";

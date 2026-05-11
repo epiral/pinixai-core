@@ -9,7 +9,7 @@ import { createIPCManifest, type IPCManifest } from "./manifest";
 
 // === IPC Protocol Types ===
 
-type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done" | "list_clips" | "list_clips_result";
+type MessageType = "register" | "registered" | "invoke" | "result" | "error" | "chunk" | "done" | "list_clips" | "list_clips_result" | "data" | "data_result";
 
 interface BaseMessage {
   type: MessageType;
@@ -71,6 +71,7 @@ let registeredAlias: string | undefined;
 const bindings = loadBindings();
 const pendingInvokes = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
 const pendingListClips = new Map<string, { resolve: (v: RuntimeClipInfo[]) => void; reject: (e: Error) => void }>();
+const pendingData = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
 let idCounter = 0;
 
 function nextId(): string {
@@ -142,6 +143,28 @@ function send(msg: Record<string, unknown>): void {
 }
 
 // === Public API ===
+
+export function getAlias(): string | undefined {
+  return registeredAlias;
+}
+
+export async function dataRequest(
+  operation: string,
+  path: string,
+  content?: string,
+  mime?: string,
+  clipName?: string,
+): Promise<unknown> {
+  const id = nextId();
+  return new Promise((resolve, reject) => {
+    pendingData.set(id, { resolve, reject });
+    const msg: Record<string, unknown> = { id, type: "data", operation, path };
+    if (content !== undefined) msg.content = content;
+    if (mime !== undefined) msg.mime = mime;
+    if (clipName !== undefined) msg.clip = clipName;
+    send(msg);
+  });
+}
 
 export async function invoke(slot: string, command: string, input: unknown): Promise<unknown> {
   const binding = bindings[slot];
@@ -284,6 +307,16 @@ export async function serveIPC(clip: Clip): Promise<void> {
         if (pending) {
           pendingListClips.delete(res.id!);
           pending.resolve(res.clips ?? []);
+        }
+        break;
+      }
+
+      case "data_result": {
+        const res = msg as BaseMessage & Record<string, unknown>;
+        const pendingReq = pendingData.get(res.id!);
+        if (pendingReq) {
+          pendingData.delete(res.id!);
+          pendingReq.resolve(res);
         }
         break;
       }
